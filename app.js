@@ -19,7 +19,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Retract scapulae into bench, maintain 5-point contact, drive through feet, lower bar with control to lower sternum.",
     tempo: "3-1-1-0",
-    icon: "🏋️‍♂️"
   },
   {
     id: "incline-dumbbell-press",
@@ -32,7 +31,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Bench angle at 30 degrees. Keep wrists stacked directly above elbows, squeeze upper chest at apex without clacking weights.",
     tempo: "3-0-1-0",
-    icon: "💪"
   },
   {
     id: "cable-chest-flye",
@@ -45,7 +43,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Isolation",
     cues: "Staggered stance, slight bend in elbows, scoop hands upward along chest line, hold 1-second peak contraction.",
     tempo: "2-1-1-1",
-    icon: "⚡"
   },
   {
     id: "weighted-dips",
@@ -58,7 +55,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Lean torso forward 30 degrees, flare elbows slightly out, descend until upper arms parallel floor.",
     tempo: "3-1-1-0",
-    icon: "🔥"
   },
 
   // BACK
@@ -73,7 +69,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Bar directly over midfoot, engage lats like protecting armpits, drive floor away with leg press intent before locking hips.",
     tempo: "2-1-1-0",
-    icon: "⚡"
   },
   {
     id: "neutral-pullups",
@@ -86,7 +81,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Initiate pull by depressing scapulae down and back, pull chest toward handles, full dead-hang stretch at bottom.",
     tempo: "3-0-1-1",
-    icon: "🧗"
   },
   {
     id: "chest-supported-tbar-row",
@@ -99,7 +93,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Eliminates axial spinal load. Drive elbows toward ceiling, retract shoulder blades aggressively without lifting chest off pad.",
     tempo: "3-1-1-1",
-    icon: "🎯"
   },
   {
     id: "single-arm-dumbbell-row",
@@ -112,7 +105,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Pull dumbbell toward hip pocket rather than armpit to optimize lat fiber recruitment.",
     tempo: "3-0-1-0",
-    icon: "🛡️"
   },
 
   // LEGS / QUADRICEPS / HAMSTRINGS / GLUTES
@@ -127,7 +119,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Bar on upper traps, deep diaphragmatic breath into belt, knees track in line with toes, maintain upright torso to full depth.",
     tempo: "3-1-1-0",
-    icon: "🏋️"
   },
   {
     id: "romanian-deadlift",
@@ -140,7 +131,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Soft knee bend, push hips backward horizontally as if touching a wall behind you, feel intense hamstring stretch before driving hips forward.",
     tempo: "3-1-1-0",
-    icon: "⚡"
   },
   {
     id: "bulgarian-split-squat",
@@ -153,7 +143,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Rear foot on bench laces-down, forward knee travels over toes, slight forward lean for maximum glute-quad tension.",
     tempo: "3-1-1-0",
-    icon: "🔥"
   },
   {
     id: "leg-press-45",
@@ -166,7 +155,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Keep lower back and pelvis glued to pad, avoid locking knees at lockout, descend deep into hip flexion.",
     tempo: "3-0-1-0",
-    icon: "🚀"
   },
   {
     id: "seated-leg-curl",
@@ -179,7 +167,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Isolation",
     cues: "Seated position places hamstrings in optimal hip-flexed stretch. Slow 3-second eccentric return.",
     tempo: "3-1-1-1",
-    icon: "🌀"
   },
   {
     id: "standing-calf-raise",
@@ -192,7 +179,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Isolation",
     cues: "Descend into full deep ankle dorsiflexion, hold stretch 2 seconds, explode onto balls of feet.",
     tempo: "3-2-1-1",
-    icon: "👟"
   },
 
   // SHOULDERS / DELTOIDS
@@ -207,7 +193,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Squeeze glutes and quads tight, press bar straight upward while moving head forward once bar clears forehead.",
     tempo: "2-1-1-0",
-    icon: "🛡️"
   },
   {
     id: "lateral-raise-cables",
@@ -220,7 +205,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Isolation",
     cues: "Set pulley at wrist height. Lead with elbows, maintain constant cable tension throughout range without swinging.",
     tempo: "3-1-1-1",
-    icon: "🦅"
   },
   {
     id: "rear-delt-reverse-flye",
@@ -233,7 +217,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Isolation",
     cues: "Chest on 45° incline, palms facing down, sweep arms out wide like hugging a wide barrel, isolate rear delts.",
     tempo: "3-0-1-1",
-    icon: "⚡"
   },
 
   // ARMS (BICEPS & TRICEPS)
@@ -248,7 +231,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Isolation",
     cues: "Sit on 60° incline bench, let arms hang directly down behind torso for deep shoulder extension stretch, supinate at top.",
     tempo: "3-1-1-1",
-    icon: "💪"
   },
   {
     id: "skull-crushers",
@@ -261,7 +243,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Isolation",
     cues: "Keep upper arms angled 15 degrees back from vertical, lower bar behind crown of head for maximum triceps stretch.",
     tempo: "3-1-1-0",
-    icon: "💀"
   },
   {
     id: "hammer-preacher-curl",
@@ -274,7 +255,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Isolation",
     cues: "Neutral grip on preacher pad. Eliminates cheating and builds thick upper arm width.",
     tempo: "3-1-1-0",
-    icon: "🔨"
   },
   {
     id: "cable-rope-pushdown",
@@ -287,7 +267,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Isolation",
     cues: "Pin elbows to ribs, spread ropes apart at bottom of movement, flex triceps hard for full second.",
     tempo: "2-1-1-1",
-    icon: "⛓️"
   },
 
   // CORE & FUNCTIONAL
@@ -302,7 +281,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Avoid swinging, curl pelvis upward toward chest, control the 3-second descent.",
     tempo: "3-0-1-1",
-    icon: "🧘"
   },
   {
     id: "cable-woodchopper",
@@ -315,7 +293,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Rotate through thoracic spine and hips, keep arms extended, drive power across torso diagonal.",
     tempo: "2-0-1-0",
-    icon: "🌪️"
   },
   {
     id: "ab-wheel-rollout",
@@ -328,7 +305,6 @@ const EXERCISES_DATABASE = [
     mechanic: "Compound",
     cues: "Tuck pelvis into posterior pelvic tilt, roll forward until nose near floor, pull back from abs without arching spine.",
     tempo: "3-1-1-0",
-    icon: "⚙️"
   }
 ];
 
@@ -568,6 +544,7 @@ class KinetixApp {
   }
 
   init() {
+    this.initAuth();
     this.bindNavigation();
     this.renderMetricsHeader();
     this.renderExerciseVault();
@@ -577,6 +554,7 @@ class KinetixApp {
     this.bindCalculators();
     this.bindLogger();
     this.renderHistoryAndCharts();
+    this.renderAdminDashboard();
 
     // Mobile sidebar toggle
     const toggleBtn = document.getElementById('mobileMenuToggle');
@@ -650,6 +628,17 @@ class KinetixApp {
         const targetTab = item.getAttribute('data-tab');
         if (!targetTab) return;
 
+        // Verify Admin permission if clicking Admin Portal
+        if (targetTab === 'admin') {
+          const u = KinetixAuth.getCurrentUser();
+          if (!u || u.role !== 'admin') {
+            this.showToast('Access Restricted: Master Admin authorization required.');
+            this.openAuthModal('signin');
+            return;
+          }
+          this.renderAdminDashboard();
+        }
+
         navItems.forEach(n => n.classList.remove('active'));
         item.classList.add('active');
 
@@ -700,12 +689,12 @@ class KinetixApp {
       <div class="exercise-card card-interactive">
         <div>
           <div class="exercise-card-header">
-            <h3 class="exercise-card-title">${ex.icon} ${ex.name}</h3>
+            <h3 class="exercise-card-title">${ex.name}</h3>
             <span class="exercise-mechanic-badge">${ex.mechanic}</span>
           </div>
 
           <div class="exercise-muscles-row">
-            <span class="muscle-badge-primary">🎯 ${ex.primaryMuscle}</span>
+            <span class="muscle-badge-primary">Focus: ${ex.primaryMuscle}</span>
             ${ex.secondaryMuscles.map(m => `<span class="muscle-badge-secondary">${m}</span>`).join('')}
           </div>
 
@@ -715,7 +704,7 @@ class KinetixApp {
         </div>
 
         <div class="exercise-card-footer">
-          <span class="exercise-equipment-tag">⚙️ ${ex.equipment} • Tempo: ${ex.tempo}</span>
+          <span class="exercise-equipment-tag">${ex.equipment} • Tempo: ${ex.tempo}</span>
           <button class="btn-secondary" style="padding: 6px 12px; font-size: 0.78rem;" onclick="app.quickAddExerciseToLog('${ex.name}')">
             + Add to Session
           </button>
@@ -1132,7 +1121,7 @@ class KinetixApp {
         // Complete!
         this.resetTimer();
         this.audio.playSessionComplete();
-        this.showToast("🎉 Workout Finished! Outstanding high-intensity performance!");
+        this.showToast("Workout Finished! Outstanding high-intensity performance!");
         return;
       }
       this.timerState.isWorkPhase = false;
@@ -1411,7 +1400,7 @@ class KinetixApp {
     this.saveUserData();
     this.renderHistoryAndCharts();
 
-    this.showToast(`🔥 Workout Completed! Logged ${volume.toLocaleString()} kg total volume load.`);
+    this.showToast(`Workout Completed! Logged ${volume.toLocaleString()} kg total volume load.`);
     this.audio.playSessionComplete();
   }
 
@@ -1437,7 +1426,9 @@ class KinetixApp {
     if (prContainer) {
       prContainer.innerHTML = this.userData.personalRecords.map(pr => `
         <div class="trophy-card">
-          <div class="trophy-icon">🏆</div>
+          <div class="trophy-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.45 1-1 1H7v2h10v-2h-2c-.55 0-1-.45-1-1v-2.34c3.24-.76 5-3.32 5-6.66V4H6v4c0 3.34 1.76 5.9 5 6.66z"></path></svg>
+          </div>
           <div class="trophy-info">
             <h5>${pr.lift}</h5>
             <p>1RM Standard Assessment</p>
@@ -1550,7 +1541,7 @@ class KinetixApp {
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.innerHTML = `
-      <span style="color: var(--accent-lime); font-size: 1.2rem;">⚡</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--accent-lime); flex-shrink: 0;"><polyline points="20 6 9 17 4 12"></polyline></svg>
       <div>${message}</div>
     `;
 
@@ -1561,6 +1552,317 @@ class KinetixApp {
       toast.style.transform = 'translateX(50px)';
       setTimeout(() => toast.remove(), 300);
     }, 4000);
+  }
+
+  // ========================================================================
+  // AUTHENTICATION & CLIENT / ADMIN CONTROL METHODS
+  // ========================================================================
+  initAuth() {
+    this.updateUserUI(KinetixAuth.getCurrentUser());
+
+    window.addEventListener('kinetix_auth_changed', (e) => {
+      this.updateUserUI(e.detail);
+    });
+
+    // Close user dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('headerUserDropdown');
+      const badge = document.getElementById('headerUserBadge');
+      if (dropdown && badge && !badge.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+  }
+
+  updateUserUI(user) {
+    const headerName = document.getElementById('headerUserName');
+    const headerRole = document.getElementById('headerUserRoleBadge');
+    const headerAvatar = document.getElementById('headerUserAvatar');
+    const dropdownName = document.getElementById('dropdownUserName');
+    const dropdownEmail = document.getElementById('dropdownUserEmail');
+    const dropdownAdminLink = document.getElementById('dropdownAdminLink');
+
+    const sidebarName = document.getElementById('sidebarUserName');
+    const sidebarTier = document.getElementById('sidebarUserTier');
+    const sidebarAvatar = document.getElementById('sidebarUserAvatar');
+
+    const adminNavCat = document.getElementById('adminNavCategory');
+    const adminNavItem = document.getElementById('adminNavItem');
+
+    if (user) {
+      if (headerName) headerName.textContent = user.name;
+      if (headerAvatar) headerAvatar.src = user.avatar;
+      if (dropdownName) dropdownName.textContent = user.name;
+      if (dropdownEmail) dropdownEmail.textContent = user.email;
+
+      if (sidebarName) sidebarName.textContent = user.name;
+      if (sidebarTier) sidebarTier.textContent = user.tier || (user.role === 'admin' ? 'HEAD OF PERFORMANCE' : 'ELITE ATHLETE');
+      if (sidebarAvatar) {
+        const initials = user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        sidebarAvatar.textContent = initials || 'KT';
+      }
+
+      if (user.role === 'admin') {
+        if (headerRole) {
+          headerRole.textContent = 'ADMIN';
+          headerRole.className = 'header-role-pill role-admin';
+        }
+        if (adminNavCat) adminNavCat.style.display = 'block';
+        if (adminNavItem) adminNavItem.style.display = 'flex';
+        if (dropdownAdminLink) dropdownAdminLink.style.display = 'flex';
+      } else {
+        if (headerRole) {
+          headerRole.textContent = 'ATHLETE';
+          headerRole.className = 'header-role-pill';
+        }
+        if (adminNavCat) adminNavCat.style.display = 'none';
+        if (adminNavItem) adminNavItem.style.display = 'none';
+        if (dropdownAdminLink) dropdownAdminLink.style.display = 'none';
+
+        // If regular user is currently on admin tab, switch away
+        if (this.currentTab === 'admin') {
+          const dashNav = document.querySelector('.nav-item[data-tab="dashboard"]');
+          if (dashNav) dashNav.click();
+        }
+      }
+    } else {
+      if (headerName) headerName.textContent = 'Sign In';
+      if (headerRole) headerRole.textContent = 'GUEST';
+      if (dropdownName) dropdownName.textContent = 'Guest Visitor';
+      if (dropdownEmail) dropdownEmail.textContent = 'Sign in to access custom training';
+      if (adminNavCat) adminNavCat.style.display = 'none';
+      if (adminNavItem) adminNavItem.style.display = 'none';
+      if (dropdownAdminLink) dropdownAdminLink.style.display = 'none';
+    }
+  }
+
+  toggleUserMenu(e) {
+    e.stopPropagation();
+    const dropdown = document.getElementById('headerUserDropdown');
+    if (!dropdown) return;
+    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+  }
+
+  openAuthModal(defaultTab = 'signin') {
+    const modal = document.getElementById('authModal');
+    if (modal) {
+      this.switchAuthTab(defaultTab);
+      modal.classList.add('active');
+    }
+  }
+
+  closeAuthModal() {
+    const modal = document.getElementById('authModal');
+    if (modal) modal.classList.remove('active');
+    this.hideAuthAlert();
+  }
+
+  switchAuthTab(tab) {
+    const btnSignIn = document.getElementById('tabBtnSignIn');
+    const btnRegister = document.getElementById('tabBtnRegister');
+    const formSignIn = document.getElementById('signInForm');
+    const formRegister = document.getElementById('registerForm');
+
+    this.hideAuthAlert();
+
+    if (tab === 'signin') {
+      if (btnSignIn) btnSignIn.classList.add('active');
+      if (btnRegister) btnRegister.classList.remove('active');
+      if (formSignIn) formSignIn.style.display = 'block';
+      if (formRegister) formRegister.style.display = 'none';
+    } else {
+      if (btnSignIn) btnSignIn.classList.remove('active');
+      if (btnRegister) btnRegister.classList.add('active');
+      if (formSignIn) formSignIn.style.display = 'none';
+      if (formRegister) formRegister.style.display = 'block';
+    }
+  }
+
+  showAuthAlert(message, type = 'error') {
+    const alertBox = document.getElementById('authAlertBox');
+    if (!alertBox) return;
+    alertBox.textContent = message;
+    alertBox.className = `auth-alert ${type}`;
+    alertBox.style.display = 'block';
+  }
+
+  hideAuthAlert() {
+    const alertBox = document.getElementById('authAlertBox');
+    if (alertBox) alertBox.style.display = 'none';
+  }
+
+  togglePasswordVisibility(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    if (input.type === 'password') {
+      input.type = 'text';
+      btn.style.color = 'var(--accent-lime)';
+    } else {
+      input.type = 'password';
+      btn.style.color = 'var(--text-muted)';
+    }
+  }
+
+  submitSignIn() {
+    const email = document.getElementById('signInEmail').value;
+    const pass = document.getElementById('signInPassword').value;
+
+    const res = KinetixAuth.login(email, pass);
+    if (!res.success) {
+      this.showAuthAlert(res.message, 'error');
+      return;
+    }
+
+    this.closeAuthModal();
+    this.showToast(res.message);
+
+    if (res.user.role === 'admin') {
+      const adminNav = document.querySelector('.nav-item[data-tab="admin"]');
+      if (adminNav) adminNav.click();
+    }
+  }
+
+  submitRegister() {
+    const name = document.getElementById('regName').value;
+    const email = document.getElementById('regEmail').value;
+    const pass = document.getElementById('regPassword').value;
+
+    const res = KinetixAuth.register(name, email, pass);
+    if (!res.success) {
+      this.showAuthAlert(res.message, 'error');
+      return;
+    }
+
+    this.closeAuthModal();
+    this.showToast(`Welcome to Kinetix Lab, ${res.user.name}! Account authorized.`);
+  }
+
+  quickFillAdmin() {
+    this.switchAuthTab('signin');
+    const emailEl = document.getElementById('signInEmail');
+    const passEl = document.getElementById('signInPassword');
+    if (emailEl) emailEl.value = KinetixAuth.MASTER_ADMIN_EMAIL;
+    if (passEl) passEl.value = KinetixAuth.MASTER_ADMIN_DEFAULT_PASS;
+    this.submitSignIn();
+  }
+
+  quickFillClient() {
+    this.switchAuthTab('signin');
+    const emailEl = document.getElementById('signInEmail');
+    const passEl = document.getElementById('signInPassword');
+    if (emailEl) emailEl.value = 'alex.carter@kinetix.io';
+    if (passEl) passEl.value = 'Password123!';
+    this.submitSignIn();
+  }
+
+  logout() {
+    KinetixAuth.logout();
+    const dropdown = document.getElementById('headerUserDropdown');
+    if (dropdown) dropdown.style.display = 'none';
+    this.showToast('Signed out of session.');
+    const dashNav = document.querySelector('.nav-item[data-tab="dashboard"]');
+    if (dashNav) dashNav.click();
+  }
+
+  // ========================================================================
+  // ADMIN DASHBOARD METHODS
+  // ========================================================================
+  renderAdminDashboard(filterText = '') {
+    const users = KinetixAuth.getAllUsers();
+    const totalVal = document.getElementById('adminTotalUsersVal');
+    if (totalVal) totalVal.textContent = users.length;
+
+    const tbody = document.getElementById('adminUsersTableBody');
+    if (!tbody) return;
+
+    const query = filterText.toLowerCase().trim();
+    const filtered = query
+      ? users.filter(u => u.name.toLowerCase().includes(query) || u.email.toLowerCase().includes(query))
+      : users;
+
+    tbody.innerHTML = filtered.map(u => {
+      const isMaster = u.email === KinetixAuth.MASTER_ADMIN_EMAIL;
+      return `
+        <tr>
+          <td>
+            <div class="athlete-td-flex">
+              <img src="${u.avatar}" alt="${u.name}" class="athlete-td-avatar">
+              <div>
+                <div class="athlete-td-name">${u.name} ${isMaster ? '<span style="color: var(--accent-orange); font-size: 0.75rem;">(Master Admin)</span>' : ''}</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); font-family: var(--font-mono);">ID: ${u.id}</div>
+              </div>
+            </div>
+          </td>
+          <td style="font-family: var(--font-mono); color: var(--text-secondary);">${u.email}</td>
+          <td>
+            <span class="role-badge-tag ${u.role}">${u.role.toUpperCase()}</span>
+          </td>
+          <td style="font-size: 0.8rem; color: var(--text-muted);">${u.tier || 'Athlete'}</td>
+          <td style="font-family: var(--font-mono); font-weight: 600; color: var(--accent-lime);">${u.workoutsCompleted || 0} Sessions</td>
+          <td>
+            <span class="status-pill ${u.status.toLowerCase()}">${u.status}</span>
+          </td>
+          <td style="text-align: right;">
+            <button class="admin-action-btn" onclick="app.adminToggleUser('${u.id}')" title="Change status">
+              ${u.status === 'Active' ? 'Suspend' : 'Activate'}
+            </button>
+            ${!isMaster ? `
+              <button class="admin-action-btn btn-del" onclick="app.adminDeleteUser('${u.id}', '${u.name}')" title="Delete record">
+                Remove
+              </button>
+            ` : ''}
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  refreshAdminDashboard() {
+    this.renderAdminDashboard();
+    this.showToast('Admin database verified & telemetry synced.');
+  }
+
+  filterAdminUsers(val) {
+    this.renderAdminDashboard(val);
+  }
+
+  adminToggleUser(userId) {
+    const res = KinetixAuth.toggleUserStatus(userId);
+    if (res.success) {
+      this.showToast(res.message);
+      this.renderAdminDashboard();
+    } else {
+      this.showToast(res.message);
+    }
+  }
+
+  adminDeleteUser(userId, name) {
+    if (confirm(`Are you sure you want to remove ${name} from the athlete database?`)) {
+      const res = KinetixAuth.deleteUser(userId);
+      if (res.success) {
+        this.showToast(res.message);
+        this.renderAdminDashboard();
+      } else {
+        this.showToast(res.message);
+      }
+    }
+  }
+
+  openNewAthleteModal() {
+    this.openAuthModal('register');
+  }
+
+  dispatchBroadcast() {
+    const titleEl = document.getElementById('adminBroadcastTitle');
+    const bodyEl = document.getElementById('adminBroadcastBody');
+    if (!titleEl || !titleEl.value.trim()) {
+      this.showToast('Please enter a broadcast headline.');
+      return;
+    }
+    const headline = titleEl.value.trim();
+    titleEl.value = '';
+    if (bodyEl) bodyEl.value = '';
+    this.showToast(`Broadcast published to all client devices: "${headline}"`);
   }
 }
 

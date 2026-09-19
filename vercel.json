@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "{index.html,styles.css,app.js,sw.js,manifest.json,icon.svg,*.png,*.jpg,assets/**}",
+      "src": "{index.html,styles.css,app.js,auth.js,sw.js,manifest.json,icon.svg,*.png,*.jpg,assets/**}",
       "use": "@vercel/static"
     }
   ],
