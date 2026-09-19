@@ -2,8 +2,8 @@
   "name": "kinetix-athletic-lab",
   "version": "1.0.0",
   "description": "Professional High-Performance Body Fitness Suite & Biomechanics Engine",
-  "main": "main.js",
   "scripts": {
+    "build": "echo 'Static build ready'",
     "start": "npx electron .",
     "web": "node server.js"
   },
