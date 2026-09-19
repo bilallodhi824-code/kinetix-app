@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KINETIX // Elite Athletic Performance Lab & Biomechanics Suite</title>
+  <meta name="description" content="Professional high-performance body fitness suite featuring interactive muscle anatomy, live interval engine, 1RM profiler, and precision macro calculations.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#080a0f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Kinetix">
+  <link rel="icon" type="image/svg+xml" href="icon.svg">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- ====================================================================
+         SIDEBAR NAVIGATION
+         ==================================================================== -->
+    <aside class="sidebar" id="appSidebar">
+      <div class="brand-area">
+        <div class="brand-logo-icon">K</div>
+        <div class="brand-text">
+          <div class="brand-title">KINETIX <span>LAB</span></div>
+          <div class="brand-subtitle">ATHLETIC OS v3.8</div>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-category-title">Core Systems</div>
+
+        <div class="nav-item active" data-tab="dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          <span>Dashboard</span>
+        </div>
+
+        <div class="nav-item" data-tab="programs">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          <span>Periodized Splits</span>
+          <span class="nav-badge">PRO</span>
+        </div>
+
+        <div class="nav-item" data-tab="hiit">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>Live HIIT Engine</span>
+        </div>
+
+        <div class="nav-item" data-tab="anatomy">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a4 4 0 0 0-4 4v1a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4z"></path>
+            <path d="M6 10v4a6 6 0 0 0 12 0v-4"></path>
+            <line x1="12" y1="18" x2="12" y2="22"></line>
+          </svg>
+          <span>Muscle Anatomy</span>
+        </div>
+
+        <div class="nav-item" data-tab="vault">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+          <span>Exercise Vault</span>
+        </div>
+
+        <div class="nav-category-title">Analytics & Tools</div>
+
+        <div class="nav-item" data-tab="logger">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+          <span>Workout Tracker</span>
+        </div>
+
+        <div class="nav-item" data-tab="calculators">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+            <line x1="8" y1="6" x2="16" y2="6"></line>
+            <line x1="16" y1="14" x2="16" y2="18"></line>
+            <path d="M16 10h.01"></path>
+            <path d="M12 10h.01"></path>
+            <path d="M8 10h.01"></path>
+            <path d="M12 14h.01"></path>
+            <path d="M8 14h.01"></path>
+            <path d="M12 18h.01"></path>
+            <path d="M8 18h.01"></path>
+          </svg>
+          <span>1RM & Biomarkers</span>
+        </div>
+
+        <div class="nav-item" data-tab="telemetry">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          <span>Telemetry & PRs</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar">AV</div>
+          <div class="user-info-text">
+            <div class="user-name">Alex Vance</div>
+            <div class="user-tier">PRO ATHLETE #4102</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ====================================================================
+         MAIN CONTENT AREA
+         ==================================================================== -->
+    <div class="main-wrapper">
+
+      <!-- Top Sticky Header -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-toggle-btn" id="mobileMenuToggle" aria-label="Toggle Navigation">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+
+          <div class="header-live-pulse">
+            <span class="pulse-dot"></span>
+            <span>SYSTEM OPTIMAL // 88% READINESS</span>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <button class="btn-secondary" id="pwaInstallBtn" style="display: none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Install App</span>
+          </button>
+          <button class="btn-primary" onclick="document.querySelector('.nav-item[data-tab=\'logger\']').click()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="10 8 16 12 10 16 10 8"></polygon>
+            </svg>
+            <span>Start Session</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- View Containers -->
+      <main class="content-area">
+
+        <!-- ================================================================
+             TAB 1: DASHBOARD VIEW
+             ================================================================ -->
+        <section class="tab-view active" id="view-dashboard">
+          <div class="page-hero">
+            <div class="page-hero-title-group">
+              <h1>Athletic Cockpit</h1>
+              <div class="page-hero-subtitle">Real-time physiological readiness, volume load & periodized targets</div>
+            </div>
+            <span class="tag-chip tag-lime">CYCLE 4 • WEEK 2</span>
+          </div>
+
+          <!-- Hero Metrics Grid -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">Weekly Volume</span>
+                <div class="metric-icon-box" style="background: var(--accent-lime-dim); color: var(--accent-lime);">⚡</div>
+              </div>
+              <div class="metric-value-row">
+                <div class="metric-value">47,120</div>
+                <div class="metric-unit">kg</div>
+              </div>
+              <div class="metric-footer">
+                <span class="trend-up">↑ +14.2%</span>
+                <span class="trend-text">vs last microcycle</span>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">CNS Readiness</span>
+                <div class="metric-icon-box" style="background: var(--accent-cyan-dim); color: var(--accent-cyan);">🧠</div>
+              </div>
+              <div class="metric-value-row">
+                <div class="metric-value" id="dashReadinessVal">88%</div>
+                <div class="metric-unit">Prime</div>
+              </div>
+              <div class="metric-footer">
+                <span class="trend-up" style="color: var(--accent-cyan);">Optimal HRV</span>
+                <span class="trend-text">78ms resting</span>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">Active Training Streak</span>
+                <div class="metric-icon-box" style="background: var(--accent-orange-dim); color: var(--accent-orange);">🔥</div>
+              </div>
+              <div class="metric-value-row">
+                <div class="metric-value">14</div>
+                <div class="metric-unit">Days</div>
+              </div>
+              <div class="metric-footer">
+                <span class="trend-up" style="color: var(--accent-orange);">Iron Discipline</span>
+                <span class="trend-text">No missed sessions</span>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-header">
+                <span class="metric-label">Metabolic Expenditure</span>
+                <div class="metric-icon-box" style="background: var(--accent-purple-dim); color: var(--accent-purple);">📈</div>
+              </div>
+              <div class="metric-value-row">
+                <div class="metric-value">2,840</div>
+                <div class="metric-unit">kcal</div>
+              </div>
+              <div class="metric-footer">
+                <span class="trend-up" style="color: var(--accent-purple);">Target 2,900</span>
+                <span class="trend-text">On track</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dashboard 2-Col Split -->
+          <div class="dashboard-grid">
+            <div class="dashboard-left-col">
+              <!-- Today's Prescribed Routine -->
+              <div class="hero-routine-card">
+                <div class="hero-routine-info">
+                  <span class="routine-phase-tag">⚡ TODAY'S HIGH-STIMULUS PROTOCOL</span>
+                  <h2 class="hero-routine-title">Upper Power & Horizontal Overload</h2>
+                  <p class="hero-routine-desc">
+                    Targeting explosive fast-twitch recruitment across clavicular pectorals and lats with strict biomechanical bar paths.
+                  </p>
+
+                  <div class="routine-meta-items">
+                    <div class="routine-meta-item">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                      <span>55-65 mins</span>
+                    </div>
+                    <div class="routine-meta-item">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                      </svg>
+                      <span>RPE 8.5 Avg</span>
+                    </div>
+                    <div class="routine-meta-item">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                      </svg>
+                      <span>5 Key Exercises</span>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; gap: 12px;">
+                    <button class="btn-primary" onclick="app.loadRoutineIntoSession('upper-lower-hypertrophy', 'Day 1 - Upper Power')">
+                      Execute Workout →
+                    </button>
+                    <button class="btn-secondary" onclick="app.openProgramDetails('upper-lower-hypertrophy')">
+                      View Full Split
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Movement Library Highlights -->
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span>Primary Biomechanical Focus Today</span>
+                  </h3>
+                  <button class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;" onclick="document.querySelector('.nav-item[data-tab=\'vault\']').click()">
+                    View All Movements →
+                  </button>
+                </div>
+
+                <div class="exercise-quick-list">
+                  <div class="exercise-quick-item">
+                    <div class="exercise-quick-left">
+                      <div class="exercise-icon-avatar">🏋️‍♂️</div>
+                      <div class="exercise-quick-info">
+                        <h4>Barbell Flat Bench Press</h4>
+                        <p>Compound • 4 Sets @ 5-6 Reps (RPE 8.5)</p>
+                      </div>
+                    </div>
+                    <span class="exercise-quick-target">Pectoralis Major</span>
+                  </div>
+
+                  <div class="exercise-quick-item">
+                    <div class="exercise-quick-left">
+                      <div class="exercise-icon-avatar">🧗</div>
+                      <div class="exercise-quick-info">
+                        <h4>Weighted Neutral-Grip Pull-Up</h4>
+                        <p>Compound • 4 Sets @ 6-8 Reps (RPE 8)</p>
+                      </div>
+                    </div>
+                    <span class="exercise-quick-target">Latissimus Dorsi</span>
+                  </div>
+
+                  <div class="exercise-quick-item">
+                    <div class="exercise-quick-left">
+                      <div class="exercise-icon-avatar">🛡️</div>
+                      <div class="exercise-quick-info">
+                        <h4>Standing Overhead Military Press</h4>
+                        <p>Compound • 3 Sets @ 6-8 Reps (RPE 8)</p>
+                      </div>
+                    </div>
+                    <span class="exercise-quick-target">Anterior Deltoids</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Recovery & Telemetry Battery -->
+            <div class="dashboard-right-col">
+              <div class="card readiness-widget">
+                <h3 style="font-size: 1.15rem; margin-bottom: 6px;">CNS Biological Battery</h3>
+                <p style="font-size: 0.8rem; margin-bottom: 20px;">Recovery status based on HRV and volume load</p>
+
+                <div class="circular-meter-box">
+                  <svg class="circular-svg" viewBox="0 0 160 160">
+                    <circle class="meter-bg-circle" cx="80" cy="80" r="70"></circle>
+                    <circle class="meter-val-circle" cx="80" cy="80" r="70"></circle>
+                  </svg>
+                  <div class="meter-inner-content">
+                    <div class="meter-inner-val">88%</div>
+                    <div class="meter-inner-label">HYPER-READY</div>
+                  </div>
+                </div>
+
+                <div class="biometric-breakdown">
+                  <div class="bio-row">
+                    <span class="bio-name">Resting Heart Rate</span>
+                    <span class="bio-val" style="color: var(--accent-lime);">51 BPM</span>
+                  </div>
+                  <div class="bio-row">
+                    <span class="bio-name">Heart Rate Variability</span>
+                    <span class="bio-val" style="color: var(--accent-cyan);">78 ms</span>
+                  </div>
+                  <div class="bio-row">
+                    <span class="bio-name">Sleep Quality Index</span>
+                    <span class="bio-val" style="color: #ffffff;">9.1 / 10</span>
+                  </div>
+                  <div class="bio-row">
+                    <span class="bio-name">Systemic Muscular Soreness</span>
+                    <span class="bio-val" style="color: var(--accent-orange);">Low (15%)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Launch Interval Timer Card -->
+              <div class="card" style="background: linear-gradient(135deg, rgba(0, 240, 255, 0.08) 0%, rgba(15, 20, 31, 0.8) 100%); border-color: rgba(0, 240, 255, 0.25);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                  <span class="tag-chip tag-cyan">CARDIOVASCULAR INTENSITY</span>
+                  <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent-cyan);">LIVE AUDIO</span>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 8px;">Tabata & HIIT Engine</h3>
+                <p style="font-size: 0.85rem; margin-bottom: 18px;">
+                  High-intensity intervals with acoustic chime cues and synchronized concentric pacing.
+                </p>
+                <button class="btn-primary" style="width: 100%; justify-content: center; background: var(--gradient-cyan);" onclick="document.querySelector('.nav-item[data-tab=\'hiit\']').click()">
+                  Open Interval Engine →
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             TAB 2: PERIODIZED TRAINING PROGRAMS
+             ================================================================ -->
+        <section class="tab-view" id="view-programs">
+          <div class="page-hero">
+            <div class="page-hero-title-group">
+              <h1>Elite Periodized Programs</h1>
+              <div class="page-hero-subtitle">Scientifically structured macrocycles for hypertrophy, dense power, and athletic composition</div>
+            </div>
+          </div>
+
+          <div class="program-cards-grid" id="programCardsGrid">
+            <!-- Rendered by app.js -->
+          </div>
+        </section>
+
+        <!-- ================================================================
+             TAB 3: LIVE HIIT & INTERVAL ENGINE
+             ================================================================ -->
+        <section class="tab-view" id="view-hiit">
+          <div class="page-hero">
+            <div class="page-hero-title-group">
+              <h1>Live HIIT / Tabata Engine</h1>
+              <div class="page-hero-subtitle">Synthesized Web Audio countdowns, customizable work-rest intervals & visual ring tracking</div>
+            </div>
+          </div>
+
+          <div class="hiit-engine-container">
+            <!-- Main Timer Display Card -->
+            <div class="card timer-main-card">
+              <div class="timer-ring-container">
+                <svg class="timer-svg" viewBox="0 0 320 320">
+                  <circle class="timer-track" cx="160" cy="160" r="140"></circle>
+                  <circle class="timer-progress" id="timerProgressRing" cx="160" cy="160" r="140"></circle>
+                </svg>
+
+                <div class="timer-center-content">
+                  <div class="timer-phase-badge" id="timerPhaseText">WORK INTERVAL</div>
+                  <div class="timer-big-digits" id="timerDigits">00:30</div>
+                  <div class="timer-sub-info" id="timerRoundInfo">ROUND 1 OF 8</div>
+                </div>
+              </div>
+
+              <!-- Controls -->
+              <div class="timer-control-buttons">
+                <button class="btn-timer-secondary" id="timerResetBtn" title="Reset Timer">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 2v6h6"></path>
+                    <path d="M3 13a9 9 0 1 0 3-7.7L3 8"></path>
+                  </svg>
+                </button>
+
+                <button class="btn-timer-primary" id="timerToggleBtn" title="Play / Pause">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                </button>
+
+                <button class="btn-timer-secondary" id="timerSkipBtn" title="Skip Phase">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                    <line x1="19" y1="5" x2="19" y2="19"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Timer Settings & Presets -->
+            <div class="card hiit-config-card">
+              <h3 class="card-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                <span>Interval Protocols</span>
+              </h3>
+
+              <div class="preset-pills-list">
+                <div class="preset-pill active" data-work="30" data-rest="15" data-rounds="8">
+                  <div class="preset-pill-title">Standard HIIT</div>
+                  <div class="preset-pill-detail">30s Work / 15s Rest • 8 Rds</div>
+                </div>
+
+                <div class="preset-pill" data-work="20" data-rest="10" data-rounds="8">
+                  <div class="preset-pill-title">Tabata Pure</div>
+                  <div class="preset-pill-detail">20s Work / 10s Rest • 8 Rds</div>
+                </div>
+
+                <div class="preset-pill" data-work="45" data-rest="15" data-rounds="10">
+                  <div class="preset-pill-title">Metabolic Burn</div>
+                  <div class="preset-pill-detail">45s Work / 15s Rest • 10 Rds</div>
+                </div>
+
+                <div class="preset-pill" data-work="60" data-rest="30" data-rounds="6">
+                  <div class="preset-pill-title">Power Endurance</div>
+                  <div class="preset-pill-detail">60s Work / 30s Rest • 6 Rds</div>
+                </div>
+              </div>
+
+              <!-- Custom Adjusters -->
+              <div class="input-slider-group">
+                <div class="input-slider-header">
+                  <span>Work Interval (Secs)</span>
+                  <span class="input-slider-val" id="workSliderVal">30s</span>
+                </div>
+                <input type="range" class="custom-range-slider" id="workDurationSlider" min="10" max="120" step="5" value="30">
+              </div>
+
+              <div class="input-slider-group">
+                <div class="input-slider-header">
+                  <span>Rest Interval (Secs)</span>
+                  <span class="input-slider-val" id="restSliderVal">15s</span>
+                </div>
+                <input type="range" class="custom-range-slider" id="restDurationSlider" min="5" max="90" step="5" value="15">
+              </div>
+
+              <div class="input-slider-group">
+                <div class="input-slider-header">
+                  <span>Total Rounds</span>
+                  <span class="input-slider-val" id="roundsSliderVal">8</span>
+                </div>
+                <input type="range" class="custom-range-slider" id="roundsCountSlider" min="2" max="25" step="1" value="8">
+              </div>
+
+              <!-- Sound Toggle -->
+              <div class="sound-toggle-box">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <span style="font-size: 1.2rem;">🔔</span>
+                  <div>
+                    <div style="font-weight: 600; font-size: 0.9rem;">Synthesizer Audio Cues</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">Countdown beeps and phase chimes</div>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="soundToggle" checked>
+                  <span class="slider-round"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             TAB 4: INTERACTIVE MUSCLE ANATOMY EXPLORER
+             ================================================================ -->
+        <section class="tab-view" id="view-anatomy">
+          <div class="page-hero">
+            <div class="page-hero-title-group">
+              <h1>Interactive Muscle Anatomy & Biomechanics</h1>
+              <div class="page-hero-subtitle">Tap muscle groups on the anatomical avatar to isolate movement mechanics and exercise prescriptions</div>
+            </div>
+          </div>
+
+          <div class="anatomy-layout">
+            <!-- Left: SVG Body Avatar -->
+            <div class="anatomy-viewer-panel">
+              <div class="body-svg-container">
+                <svg width="280" height="480" viewBox="0 0 280 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Head & Neck -->
+                  <circle cx="140" cy="40" r="22" fill="#151b29" stroke="#334155" stroke-width="1.5" />
+                  <path d="M132 62 L148 62 L150 78 L130 78 Z" fill="#151b29" stroke="#334155" />
+
+                  <!-- Shoulders (Deltoids) -->
+                  <!-- Left Delt -->
+                  <path class="muscle-group-shape" data-muscle="shoulders" d="M85 85 C80 95, 78 115, 82 130 C90 125, 96 110, 98 90 Z" />
+                  <!-- Right Delt -->
+                  <path class="muscle-group-shape" data-muscle="shoulders" d="M195 85 C200 95, 202 115, 198 130 C190 125, 184 110, 182 90 Z" />
+
+                  <!-- Chest (Pectoralis) -->
+                  <!-- Left Pec -->
+                  <path class="muscle-group-shape selected" data-muscle="chest" d="M102 92 C120 92, 136 96, 138 126 C124 135, 102 130, 96 120 C96 105, 99 96, 102 92 Z" />
+                  <!-- Right Pec -->
+                  <path class="muscle-group-shape selected" data-muscle="chest" d="M178 92 C160 92, 144 96, 142 126 C156 135, 178 130, 184 120 C184 105, 181 96, 178 92 Z" />
+
+                  <!-- Arms (Biceps & Forearms) -->
+                  <!-- Left Arm -->
+                  <path class="muscle-group-shape" data-muscle="arms" d="M80 134 C76 150, 75 170, 78 185 C84 182, 88 165, 88 140 Z" />
+                  <path class="muscle-group-shape" data-muscle="arms" d="M76 190 C70 215, 66 240, 68 255 C74 252, 80 230, 82 200 Z" />
+                  <!-- Right Arm -->
+                  <path class="muscle-group-shape" data-muscle="arms" d="M200 134 C204 150, 205 170, 202 185 C196 182, 192 165, 192 140 Z" />
+                  <path class="muscle-group-shape" data-muscle="arms" d="M204 190 C210 215, 214 240, 212 255 C206 252, 200 230, 198 200 Z" />
+
+                  <!-- Core / Abs (Rectus Abdominis) -->
+                  <path class="muscle-group-shape" data-muscle="core" d="M116 134 C128 134, 152 134, 164 134 C162 170, 160 195, 156 210 C144 214, 136 214, 124 210 C120 195, 118 170, 116 134 Z" />
+
+                  <!-- Back / Lats outline (Visible from front flank) -->
+                  <path class="muscle-group-shape" data-muscle="back" d="M96 128 C92 145, 94 175, 108 195 C106 175, 105 150, 102 135 Z" />
+                  <path class="muscle-group-shape" data-muscle="back" d="M184 128 C188 145, 186 175, 172 195 C174 175, 175 150, 178 135 Z" />
+
+                  <!-- Pelvis / Hips -->
+                  <path d="M112 212 C130 216, 150 216, 168 212 C166 230, 158 244, 140 248 C122 244, 114 230, 112 212 Z" fill="#151b29" stroke="#334155" />
+
+                  <!-- Legs: Quadriceps -->
+                  <!-- Left Quad -->
+                  <path class="muscle-group-shape" data-muscle="legs" d="M106 244 C112 270, 110 320, 108 340 C118 340, 128 335, 134 290 C136 265, 134 248, 132 244 Z" />
+                  <!-- Right Quad -->
+                  <path class="muscle-group-shape" data-muscle="legs" d="M174 244 C168 270, 170 320, 172 340 C162 340, 152 335, 146 290 C144 265, 146 248, 148 244 Z" />
+
+                  <!-- Knees -->
+                  <ellipse cx="114" cy="352" rx="10" ry="8" fill="#151b29" stroke="#334155" />
+                  <ellipse cx="166" cy="352" rx="10" ry="8" fill="#151b29" stroke="#334155" />
+
+                  <!-- Calves & Tibialis -->
+                  <!-- Left Calf -->
+                  <path class="muscle-group-shape" data-muscle="legs" d="M104 366 C100 385, 102 420, 108 445 C118 445, 122 425, 124 380 C122 368, 118 366, 104 366 Z" />
+                  <!-- Right Calf -->
+                  <path class="muscle-group-shape" data-muscle="legs" d="M176 366 C180 385, 178 420, 172 445 C162 445, 158 425, 156 380 C158 368, 162 366, 176 366 Z" />
+                </svg>
+              </div>
+
+              <!-- Legend / Quick Buttons -->
+              <div class="anatomy-legend">
+                <button class="legend-btn active" data-muscle="chest">Pectorals (Chest)</button>
+                <button class="legend-btn" data-muscle="back">Lats & Traps (Back)</button>
+                <button class="legend-btn" data-muscle="legs">Quadriceps & Hamstrings</button>
+                <button class="legend-btn" data-muscle="shoulders">Deltoids (Shoulders)</button>
+                <button class="legend-btn" data-muscle="arms">Biceps & Triceps</button>
+                <button class="legend-btn" data-muscle="core">Abs & Obliques</button>
+              </div>
+            </div>
+
+            <!-- Right: Targeted Biomechanics & Movement Recommendations -->
+            <div class="card anatomy-results-card">
+              <div class="active-muscle-header">
+                <div>
+                  <span class="tag-chip tag-cyan">TARGET ISOLATION</span>
+                  <h3 class="active-muscle-name" id="activeMuscleTitle">Pectoralis Major & Minor (Chest)</h3>
+                </div>
+                <span class="tag-chip tag-lime">Optimal Hypertrophy Range: 10-18 sets/week</span>
+              </div>
+
+              <div class="anatomy-exercise-grid" id="anatomyResultsGrid">
+                <!-- Injected via app.js -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             TAB 5: EXERCISE VAULT (40+ MOVEMENTS)
+             ================================================================ -->
+        <section class="tab-view" id="view-vault">
+          <div class="page-hero">
+            <div class="page-hero-title-group">
+              <h1>Exercise Vault & Biomechanics</h1>
+              <div class="page-hero-subtitle">Comprehensive movement encyclopedia with joint angles, tempo prescriptions & setup cues</div>
+            </div>
+          </div>
+
+          <!-- Search & Filter Controls -->
+          <div class="vault-filter-bar">
+            <div class="search-input-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" class="search-input" id="vaultSearchInput" placeholder="Search exercises, prime movers, equipment (e.g. Barbell, Lats)...">
+            </div>
+
+            <div class="filter-pills-row">
+              <button class="filter-btn active" data-category="all">All Movements</button>
+              <button class="filter-btn" data-category="chest">Chest</button>
+              <button class="filter-btn" data-category="back">Back & Lats</button>
+              <button class="filter-btn" data-category="legs">Legs & Posterior</button>
+              <button class="filter-btn" data-category="shoulders">Shoulders</button>
+              <button class="filter-btn" data-category="arms">Arms</button>
+              <button class="filter-btn" data-category="core">Core</button>
+            </div>
+          </div>
+
+          <div class="exercises-grid" id="exerciseVaultGrid">
+            <!-- Populated by app.js -->
+          </div>
+        </section>
+
+        <!-- ================================================================
+             TAB 6: WORKOUT LOGGER & SESSION TRACKER
+             ================================================================ -->
+        <section class="tab-view" id="view-logger">
+          <div class="page-hero">
+            <div class="page-hero-title-group">
+              <h1>Active Workout Logger</h1>
+              <div class="page-hero-subtitle">Real-time set entry, RPE tracking, tonnage calculation & session synchronization</div>
+            </div>
+
+            <button class="btn-primary" id="finishSessionBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Complete & Save Session</span>
+            </button>
+          </div>
+
+          <div class="logger-grid">
+            <!-- Live Active Session -->
+            <div class="card active-logger-card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">Live Training Sheet</h3>
+                  <p style="font-size: 0.8rem; color: var(--text-muted);">Log sets with exact weights, target reps and Rate of Perceived Exertion (RPE 6-10)</p>
+                </div>
+                <div style="text-align: right;">
+                  <span style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--text-muted);">ACTIVE VOLUME</span>
+                  <div id="activeSessionVolume" style="font-size: 1.4rem; font-weight: 800; font-family: var(--font-heading); color: var(--accent-lime);">
+                    0 kg
+                  </div>
+                </div>
+              </div>
+
+              <!-- Header labels -->
+              <div style="display: grid; grid-template-columns: 40px 1.4fr 90px 90px 80px 40px; gap: 10px; font-size: 0.72rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase; padding: 0 12px;">
+                <span>Set</span>
+                <span>Exercise</span>
+                <span>Load (kg)</span>
+                <span>Reps</span>
+                <span>RPE</span>
+                <span></span>
+              </div>
+
+              <div class="set-rows-container" id="setRowsContainer">
+                <!-- Injected via app.js -->
+              </div>
+
+              <div style="display: flex; gap: 12px; margin-top: 10px;">
+                <button class="btn-secondary" id="addSetRowBtn" style="flex: 1; justify-content: center;">
+                  + Add Set Row
+                </button>
+              </div>
+            </div>
+
+            <!-- Workout History & Past Tonnage -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 14 14"></polyline>
+                  </svg>
+                  <span>Logged Workout History</span>
+                </h3>
+              </div>
+
+              <div class="history-feed" id="historyFeedList">
+                <!-- Populated by app.js -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             TAB 7: 1RM CALCULATOR & BIOMARKERS / MACROS
+             ================================================================ -->
+        <section class="tab-view" id="view-calculators">
+          <div class="page-hero">
+            <div class="page-hero-title-group">
+              <h1>Biomarkers & Calculators</h1>
+              <div class="page-hero-subtitle">1-Rep Max percentage loading tables, Mifflin-St Jeor TDEE & precision macronutrient allocation</div>
+            </div>
+          </div>
+
+          <div class="calculators-grid">
+            <!-- 1RM Strength Profiler -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <span>1RM Strength Profiler (Brzycki & Epley)</span>
+                </h3>
+                <span class="tag-chip tag-cyan">STRENGTH BENCHMARK</span>
+              </div>
+
+              <div class="calc-form-grid">
+                <div>
+                  <label class="form-label">Lift Weight (kg)</label>
+                  <input type="number" class="calc-input" id="onermWeightInput" value="100">
+                </div>
+                <div>
+                  <label class="form-label">Reps Completed (1-15)</label>
+                  <input type="number" class="calc-input" id="onermRepsInput" value="5" min="1" max="15">
+                </div>
+              </div>
+
+              <div class="macro-results-panel">
+                <div style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase;">Estimated Theoretical 1RM</div>
+                <div class="onerm-hero-val" id="onermResultVal">115 kg</div>
+              </div>
+
+              <h4 style="font-size: 0.95rem; margin: 20px 0 8px; font-weight: 700;">Percentage Training Zones</h4>
+              <table class="onerm-table">
+                <thead>
+                  <tr>
+                    <th>% 1RM</th>
+                    <th>Calculated Load</th>
+                    <th>Target Rep Range</th>
+                  </tr>
+                </thead>
+                <tbody id="onermTableBody">
+                  <!-- Populated by app.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Macro & TDEE Calculator -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v20"></path>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                  </svg>
+                  <span>Precision TDEE & Macro Allocation</span>
+                </h3>
+                <span class="tag-chip tag-lime">METABOLIC ENGINE</span>
+              </div>
+
+              <div class="calc-form-grid">
+                <div>
+                  <label class="form-label">Bodyweight (kg)</label>
+                  <input type="number" class="calc-input" id="macroWeight" value="82">
+                </div>
+                <div>
+                  <label class="form-label">Height (cm)</label>
+                  <input type="number" class="calc-input" id="macroHeight" value="182">
+                </div>
+                <div>
+                  <label class="form-label">Age</label>
+                  <input type="number" class="calc-input" id="macroAge" value="28">
+                </div>
+                <div>
+                  <label class="form-label">Biological Gender</label>
+                  <select class="calc-select" id="macroGender">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+                <div class="calc-field-full">
+                  <label class="form-label">Activity Level</label>
+                  <select class="calc-select" id="macroActivity">
+                    <option value="1.375">Lightly Active (1-3 days/week)</option>
+                    <option value="1.55" selected>Moderately Active (4-5 days hard training)</option>
+                    <option value="1.725">Very Active (6-7 days intense lifting)</option>
+                    <option value="1.9">Elite Competitive Athlete (2x daily)</option>
+                  </select>
+                </div>
+                <div class="calc-field-full">
+                  <label class="form-label">Current Physiological Goal</label>
+                  <select class="calc-select" id="macroGoal">
+                    <option value="cut">Aggressive Athletic Cut (-20% deficit)</option>
+                    <option value="recomp" selected>Body Recomposition & Lean Density (Maintenance)</option>
+                    <option value="bulk">Hypertrophic Lean Surplus (+12% surplus)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Macro Results Panel -->
+              <div class="macro-results-panel">
+                <div style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase;">Daily Energy Target</div>
+                <div class="calories-hero-number" id="macroTargetCalories">2,810 kcal</div>
+
+                <div class="macro-split-bars">
+                  <div class="macro-bar-protein" id="macroBarProtein" style="width: 28%;"></div>
+                  <div class="macro-bar-carbs" id="macroBarCarbs" style="width: 47%;"></div>
+                  <div class="macro-bar-fats" id="macroBarFats" style="width: 25%;"></div>
+                </div>
+
+                <div class="macro-numbers-row">
+                  <div class="macro-val-box">
+                    <div class="macro-gram-val" id="macroProteinVal" style="color: var(--accent-lime);">180g</div>
+                    <div class="macro-gram-lbl">Protein (2.2g/kg)</div>
+                  </div>
+                  <div class="macro-val-box">
+                    <div class="macro-gram-val" id="macroCarbsVal" style="color: var(--accent-cyan);">330g</div>
+                    <div class="macro-gram-lbl">Carbohydrates</div>
+                  </div>
+                  <div class="macro-val-box">
+                    <div class="macro-gram-val" id="macroFatsVal" style="color: var(--accent-orange);">78g</div>
+                    <div class="macro-gram-lbl">Fats (Healthy)</div>
+                  </div>
+                </div>
+
+                <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+                  <span style="color: var(--text-secondary);">Optimal Daily Hydration</span>
+                  <span id="macroHydrationTarget" style="font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700;">3.3 Liters/day</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             TAB 8: TELEMETRY & PROGRESS VISUALIZER
+             ================================================================ -->
+        <section class="tab-view" id="view-telemetry">
+          <div class="page-hero">
+            <div class="page-hero-title-group">
+              <h1>Telemetry & Hall of Records</h1>
+              <div class="page-hero-subtitle">Volume progression trends, microcycle performance & personal record trophies</div>
+            </div>
+          </div>
+
+          <div class="telemetry-grid">
+            <!-- Weekly Volume Progression Chart -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                  </svg>
+                  <span>Weekly Tonnage Load Progression (kg)</span>
+                </h3>
+                <span class="tag-chip tag-lime">CANVAS 2D ENGINE</span>
+              </div>
+
+              <div class="canvas-wrapper">
+                <canvas id="volumeProgressionCanvas"></canvas>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border-subtle); font-size: 0.82rem; font-family: var(--font-mono); color: var(--text-muted);">
+                <span>Peak Load: 11,250 kg (Friday Leg Session)</span>
+                <span style="color: var(--accent-lime);">Microcycle Average: 6,730 kg/session</span>
+              </div>
+            </div>
+
+            <!-- PR Hall of Records -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                    <path d="M4 22h16"></path>
+                    <path d="M10 14.66V17c0 .55-.45 1-1 1H7v2h10v-2h-2c-.55 0-1-.45-1-1v-2.34c3.24-.76 5-3.32 5-6.66V4H6v4c0 3.34 1.76 5.9 5 6.66z"></path>
+                  </svg>
+                  <span>Hall of Records (PRs)</span>
+                </h3>
+              </div>
+
+              <div class="trophy-list" id="prHallList">
+                <!-- Populated by app.js -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- ====================================================================
+         PROGRAM DETAIL MODAL
+         ==================================================================== -->
+    <div class="modal-backdrop" id="programModal">
+      <div class="modal-box">
+        <button class="modal-close-btn" onclick="app.closeModal('programModal')">✕</button>
+        <div id="programModalBody">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Alerts Container -->
+    <div class="toast-container" id="toastAlertContainer"></div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "kinetix-athletic-lab",
+  "version": "1.0.0",
+  "description": "Professional High-Performance Body Fitness Suite & Biomechanics Engine",
+  "main": "main.js",
+  "scripts": {
+    "start": "npx electron .",
+    "web": "node server.js"
+  },
+  "keywords": ["fitness", "bodybuilding", "athletic", "biomechanics", "hiit", "workout"],
+  "author": "Kinetix Lab",
+  "license": "MIT"
+}
