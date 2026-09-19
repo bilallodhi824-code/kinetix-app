@@ -7,7 +7,17 @@
     "start": "npx electron .",
     "web": "node server.js"
   },
-  "keywords": ["fitness", "bodybuilding", "athletic", "biomechanics", "hiit", "workout"],
+  "keywords": [
+    "fitness",
+    "bodybuilding",
+    "athletic",
+    "biomechanics",
+    "hiit",
+    "workout"
+  ],
   "author": "Kinetix Lab",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "firebase-admin": "^14.4.0"
+  }
 }

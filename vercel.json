@@ -4,9 +4,14 @@
     {
       "src": "{index.html,styles.css,app.js,auth.js,sw.js,manifest.json,icon.svg,*.png,*.jpg,assets/**}",
       "use": "@vercel/static"
+    },
+    {
+      "src": "api/auth.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/(.*)", "dest": "/$1" }
   ]
 }

@@ -1400,6 +1400,9 @@ class KinetixApp {
     this.saveUserData();
     this.renderHistoryAndCharts();
 
+    // Persist to Firebase Firestore
+    KinetixAuth.logWorkout(newLog);
+
     this.showToast(`Workout Completed! Logged ${volume.toLocaleString()} kg total volume load.`);
     this.audio.playSessionComplete();
   }
@@ -1562,6 +1565,13 @@ class KinetixApp {
 
     window.addEventListener('kinetix_auth_changed', (e) => {
       this.updateUserUI(e.detail);
+      this.renderAdminDashboard();
+    });
+
+    window.addEventListener('kinetix_cloud_synced', (e) => {
+      this.renderAdminDashboard();
+      this.updateUserUI(KinetixAuth.getCurrentUser());
+      console.log('⚡ UI synced with Firebase Cloud data');
     });
 
     // Close user dropdown when clicking outside
@@ -1703,38 +1713,64 @@ class KinetixApp {
     }
   }
 
-  submitSignIn() {
+  async submitSignIn() {
     const email = document.getElementById('signInEmail').value;
     const pass = document.getElementById('signInPassword').value;
+    const submitBtn = document.getElementById('signInSubmitBtn');
 
-    const res = KinetixAuth.login(email, pass);
-    if (!res.success) {
-      this.showAuthAlert(res.message, 'error');
-      return;
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>Verifying Credentials...</span>';
     }
 
-    this.closeAuthModal();
-    this.showToast(res.message);
+    try {
+      const res = await KinetixAuth.login(email, pass);
+      if (!res.success) {
+        this.showAuthAlert(res.message, 'error');
+        return;
+      }
 
-    if (res.user.role === 'admin') {
-      const adminNav = document.querySelector('.nav-item[data-tab="admin"]');
-      if (adminNav) adminNav.click();
+      this.closeAuthModal();
+      this.showToast(res.message);
+
+      if (res.user.role === 'admin') {
+        const adminNav = document.querySelector('.nav-item[data-tab="admin"]');
+        if (adminNav) adminNav.click();
+      }
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Sign In to Dashboard</span>';
+      }
     }
   }
 
-  submitRegister() {
+  async submitRegister() {
     const name = document.getElementById('regName').value;
     const email = document.getElementById('regEmail').value;
     const pass = document.getElementById('regPassword').value;
+    const submitBtn = document.getElementById('registerSubmitBtn');
 
-    const res = KinetixAuth.register(name, email, pass);
-    if (!res.success) {
-      this.showAuthAlert(res.message, 'error');
-      return;
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>Creating Cloud Account...</span>';
     }
 
-    this.closeAuthModal();
-    this.showToast(`Welcome to Kinetix Lab, ${res.user.name}! Account authorized.`);
+    try {
+      const res = await KinetixAuth.register(name, email, pass);
+      if (!res.success) {
+        this.showAuthAlert(res.message, 'error');
+        return;
+      }
+
+      this.closeAuthModal();
+      this.showToast(`Welcome to Kinetix Lab, ${res.user.name}! Cloud profile created.`);
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Create Athlete Account</span>';
+      }
+    }
   }
 
   quickFillAdmin() {
@@ -1765,12 +1801,22 @@ class KinetixApp {
   }
 
   // ========================================================================
-  // ADMIN DASHBOARD METHODS
+  // ADMIN DASHBOARD METHODS (FIREBASE FIRESTORE SYNCED)
   // ========================================================================
   renderAdminDashboard(filterText = '') {
     const users = KinetixAuth.getAllUsers();
     const totalVal = document.getElementById('adminTotalUsersVal');
     if (totalVal) totalVal.textContent = users.length;
+
+    // Update Firebase connection status indicator
+    const dbStatusPill = document.getElementById('adminDbStatusBadge');
+    if (dbStatusPill) {
+      const isConnected = KinetixAuth.getIsCloudConnected();
+      dbStatusPill.innerHTML = `
+        <span class="live-pulse-dot" style="background: ${isConnected ? 'var(--accent-lime)' : 'var(--accent-cyan)'};"></span>
+        <span>Firebase ${KinetixAuth.FIREBASE_PROJECT_ID}: ${isConnected ? 'LIVE CLOUD' : 'SYNC READY'}</span>
+      `;
+    }
 
     const tbody = document.getElementById('adminUsersTableBody');
     if (!tbody) return;
@@ -1817,17 +1863,23 @@ class KinetixApp {
     }).join('');
   }
 
-  refreshAdminDashboard() {
+  async refreshAdminDashboard() {
+    this.showToast('Connecting to Firebase Firestore (kinetix-3121)...');
+    const res = await KinetixAuth.syncWithCloud();
     this.renderAdminDashboard();
-    this.showToast('Admin database verified & telemetry synced.');
+    if (res.success) {
+      this.showToast(`Firebase Firestore Synced: ${res.users.length} athletes loaded.`);
+    } else {
+      this.showToast('Using local cache. Offline or cloud sync in progress.');
+    }
   }
 
   filterAdminUsers(val) {
     this.renderAdminDashboard(val);
   }
 
-  adminToggleUser(userId) {
-    const res = KinetixAuth.toggleUserStatus(userId);
+  async adminToggleUser(userId) {
+    const res = await KinetixAuth.toggleUserStatus(userId);
     if (res.success) {
       this.showToast(res.message);
       this.renderAdminDashboard();
@@ -1836,9 +1888,9 @@ class KinetixApp {
     }
   }
 
-  adminDeleteUser(userId, name) {
-    if (confirm(`Are you sure you want to remove ${name} from the athlete database?`)) {
-      const res = KinetixAuth.deleteUser(userId);
+  async adminDeleteUser(userId, name) {
+    if (confirm(`Are you sure you want to remove ${name} from Firebase Firestore database?`)) {
+      const res = await KinetixAuth.deleteUser(userId);
       if (res.success) {
         this.showToast(res.message);
         this.renderAdminDashboard();

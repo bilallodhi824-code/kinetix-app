@@ -16,3 +16,6 @@ flutter_app/.flutter-plugins-dependencies
 Thumbs.db
 
 .vercel
+firebase-service-account.json
+.env
+.env.*

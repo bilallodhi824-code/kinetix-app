@@ -1112,14 +1112,24 @@
           <div class="glass-card" style="margin-top: 24px;">
             <div class="card-header-bar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
               <div>
-                <h3 class="card-title">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-                  <span>Athletes & Client Management</span>
-                </h3>
-                <p class="card-subtitle">Real-time database of registered clients, authorized access roles, and training activity</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                  <h3 class="card-title" style="margin-bottom: 0;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                    <span>Athletes & Client Management</span>
+                  </h3>
+                  <div id="adminDbStatusBadge" class="status-pill active" style="font-size: 0.72rem; padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
+                    <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-lime); box-shadow: 0 0 8px var(--accent-lime);"></span>
+                    <span>Firebase kinetix-3121: LIVE CLOUD</span>
+                  </div>
+                </div>
+                <p class="card-subtitle">Real-time Google Cloud Firestore database of registered athletes and active clients</p>
               </div>
-              <div style="display: flex; gap: 8px;">
+              <div style="display: flex; gap: 8px; align-items: center;">
                 <input type="text" id="adminSearchInput" class="admin-search-box" placeholder="Filter by name or email..." oninput="app.filterAdminUsers(this.value)">
+                <button class="btn-secondary" onclick="app.refreshAdminDashboard()" style="padding: 8px 12px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;" title="Sync with Firebase Firestore">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                  <span>Sync Cloud</span>
+                </button>
               </div>
             </div>
 
@@ -1168,17 +1178,21 @@
               <div class="card-header-bar">
                 <h3 class="card-title">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="m4.93 4.93 4.24 4.24"></path><path d="m14.83 9.17 4.24-4.24"></path><path d="m14.83 14.83 4.24 4.24"></path><path d="m9.17 14.83-4.24 4.24"></path></svg>
-                  <span>Backend & Firebase Readiness</span>
+                  <span>Firebase Cloud Database (kinetix-3121)</span>
                 </h3>
               </div>
               <div style="font-size: 0.85rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 10px;">
                 <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid var(--border-subtle);">
-                  <span>Local Data Engine:</span>
-                  <span style="color: var(--accent-lime); font-family: var(--font-mono); font-weight: 600;">ACTIVE (Persistent Storage)</span>
+                  <span>Database Engine:</span>
+                  <span style="color: var(--accent-lime); font-family: var(--font-mono); font-weight: 600;">Google Cloud Firestore (Admin SDK)</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid var(--border-subtle);">
-                  <span>Firebase SDK Bridge:</span>
-                  <span style="color: var(--accent-cyan); font-family: var(--font-mono); font-weight: 600;">READY (auth.js Firebase Connector)</span>
+                  <span>Cloud Project:</span>
+                  <span style="color: var(--accent-cyan); font-family: var(--font-mono); font-weight: 600;">kinetix-3121</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid var(--border-subtle);">
+                  <span>Service Account:</span>
+                  <span style="color: var(--text-primary); font-family: var(--font-mono); font-size: 0.75rem;">firebase-adminsdk-fbsvc@kinetix-3121...</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid var(--border-subtle);">
                   <span>Master Administrator:</span>

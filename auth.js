@@ -1,16 +1,22 @@
 /**
- * KINETIX ATHLETIC OS - AUTHENTICATION & ROLE ENGINE
- * Handles Client & Master Admin Authentication, Local Storage Persistence,
- * and modular Firebase readiness hooks.
+ * KINETIX ATHLETIC OS - AUTHENTICATION & FIREBASE FIRESTORE CLOUD ENGINE
+ * Project ID: kinetix-3121
+ * Handles Client & Master Admin Authentication, Google Cloud Firestore
+ * synchronization, real-time persistence, and offline fallback.
  */
 
 const KinetixAuth = (function() {
   const USERS_STORAGE_KEY = 'kinetix_users_db';
   const CURRENT_USER_KEY = 'kinetix_current_user';
+  const CLOUD_SYNC_KEY = 'kinetix_cloud_synced';
 
   // Master Admin Credentials
   const MASTER_ADMIN_EMAIL = 'bilallodhi824@gmail.com';
   const MASTER_ADMIN_DEFAULT_PASS = 'Admin@Kinetix2026';
+  const FIREBASE_PROJECT_ID = 'kinetix-3121';
+
+  let isCloudConnected = false;
+  let cloudStatusMessage = 'Connecting to Firebase...';
 
   // Seed default database if empty
   function initDb() {
@@ -60,15 +66,50 @@ const KinetixAuth = (function() {
       localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(initialUsers));
     }
 
-    // Default to Alex Carter or Admin if logged in
+    // Default current user if not set
     if (!localStorage.getItem(CURRENT_USER_KEY)) {
       const users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY));
-      // Auto sign-in demo client for immediate preview
-      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(users[1]));
+      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(users[1] || users[0]));
     }
+
+    // Sync with Firebase Firestore asynchronously
+    syncWithCloud();
   }
 
-  initDb();
+  // Synchronize local cache with Firestore
+  async function syncWithCloud() {
+    try {
+      const res = await fetch('/api/auth?action=users');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.success && Array.isArray(data.users)) {
+          saveUsers(data.users);
+          isCloudConnected = true;
+          cloudStatusMessage = 'Connected to Firebase Firestore (kinetix-3121)';
+          localStorage.setItem(CLOUD_SYNC_KEY, new Date().toISOString());
+
+          // Re-verify current user against fresh Firestore data
+          const current = getCurrentUser();
+          if (current) {
+            const updated = data.users.find(u => u.id === current.id || u.email.toLowerCase() === current.email.toLowerCase());
+            if (updated) {
+              localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(updated));
+              window.dispatchEvent(new CustomEvent('kinetix_auth_changed', { detail: updated }));
+            }
+          }
+
+          window.dispatchEvent(new CustomEvent('kinetix_cloud_synced', { detail: { users: data.users, project: FIREBASE_PROJECT_ID } }));
+          console.log('⚡ [Firebase Firestore] Synced', data.users.length, 'athletes from project', FIREBASE_PROJECT_ID);
+          return { success: true, users: data.users };
+        }
+      }
+    } catch (err) {
+      console.warn('⚠️ [Firebase] Running in local offline cache mode:', err.message);
+      isCloudConnected = false;
+      cloudStatusMessage = 'Local Cache (Offline Mode)';
+    }
+    return { success: false, users: getAllUsers() };
+  }
 
   function getAllUsers() {
     try {
@@ -110,8 +151,8 @@ const KinetixAuth = (function() {
     return pass && pass.length >= 6;
   }
 
-  // Register New Account
-  function register(name, email, password) {
+  // Register New Account (Firebase Firestore + Local Fallback)
+  async function register(name, email, password) {
     const cleanEmail = email.trim().toLowerCase();
     const cleanName = name.trim();
 
@@ -125,13 +166,36 @@ const KinetixAuth = (function() {
       return { success: false, message: 'Password must be at least 6 characters long.' };
     }
 
+    // Try Real Firebase Cloud API First
+    try {
+      const response = await fetch('/api/auth?action=register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: cleanName, email: cleanEmail, password })
+      });
+
+      const data = await response.json();
+      if (response.ok && data.success) {
+        const users = getAllUsers();
+        users.push(data.user);
+        saveUsers(users);
+        setCurrentUser(data.user);
+        isCloudConnected = true;
+        return { success: true, user: data.user, message: 'Account saved to Firebase Firestore!' };
+      } else if (!response.ok) {
+        return { success: false, message: data.message || 'Registration failed on server.' };
+      }
+    } catch (err) {
+      console.warn('Firebase API offline, falling back to local storage:', err);
+    }
+
+    // Local Fallback
     const users = getAllUsers();
     const exists = users.find(u => u.email.toLowerCase() === cleanEmail);
     if (exists) {
       return { success: false, message: 'An account with this email already exists. Please Sign In.' };
     }
 
-    // Role assignment: Only master email gets admin, all others get client
     const isMasterAdmin = cleanEmail === MASTER_ADMIN_EMAIL.toLowerCase();
     const newUser = {
       id: 'usr_' + Date.now(),
@@ -151,11 +215,11 @@ const KinetixAuth = (function() {
     saveUsers(users);
     setCurrentUser(newUser);
 
-    return { success: true, user: newUser, message: 'Registration successful!' };
+    return { success: true, user: newUser, message: 'Registration complete (Local Mode).' };
   }
 
-  // Login Authentication
-  function login(email, password) {
+  // Login Authentication (Firebase Firestore + Local Fallback)
+  async function login(email, password) {
     const cleanEmail = email.trim().toLowerCase();
 
     if (!validateEmail(cleanEmail)) {
@@ -165,6 +229,36 @@ const KinetixAuth = (function() {
       return { success: false, message: 'Please enter your password.' };
     }
 
+    // Try Real Firebase Cloud API First
+    try {
+      const response = await fetch('/api/auth?action=login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanEmail, password })
+      });
+
+      const data = await response.json();
+      if (response.ok && data.success && data.user) {
+        // Update local user list
+        const users = getAllUsers();
+        const idx = users.findIndex(u => u.id === data.user.id || u.email.toLowerCase() === cleanEmail);
+        if (idx !== -1) {
+          users[idx] = data.user;
+        } else {
+          users.push(data.user);
+        }
+        saveUsers(users);
+        setCurrentUser(data.user);
+        isCloudConnected = true;
+        return { success: true, user: data.user, message: data.message || `Welcome back, ${data.user.name}!` };
+      } else if (!response.ok) {
+        return { success: false, message: data.message || 'Authentication failed.' };
+      }
+    } catch (err) {
+      console.warn('Firebase API offline, checking local cache:', err);
+    }
+
+    // Local Fallback Verification
     const users = getAllUsers();
     const user = users.find(u => u.email.toLowerCase() === cleanEmail);
 
@@ -189,8 +283,8 @@ const KinetixAuth = (function() {
     return { success: true };
   }
 
-  // Admin Delete User
-  function deleteUser(userId) {
+  // Admin Delete User (Firestore + Local)
+  async function deleteUser(userId) {
     const current = getCurrentUser();
     if (!current || current.role !== 'admin') {
       return { success: false, message: 'Permission denied. Admin role required.' };
@@ -205,46 +299,87 @@ const KinetixAuth = (function() {
       return { success: false, message: 'Cannot delete the Master Admin account.' };
     }
 
+    // Call Cloud API
+    try {
+      const response = await fetch('/api/auth?action=delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        console.warn('Cloud delete warning:', data.message);
+      }
+    } catch (err) {
+      console.warn('Firebase delete offline fallback:', err);
+    }
+
     users = users.filter(u => u.id !== userId);
     saveUsers(users);
-    return { success: true, message: `User ${target.name} has been removed.` };
+    return { success: true, message: `Athlete ${target.name} removed from database.` };
   }
 
-  // Admin Toggle User Status
-  function toggleUserStatus(userId) {
+  // Admin Toggle User Status (Firestore + Local)
+  async function toggleUserStatus(userId) {
     const current = getCurrentUser();
     if (!current || current.role !== 'admin') {
       return { success: false, message: 'Permission denied.' };
     }
 
-    const users = getAllUsers();
+    let users = getAllUsers();
     const target = users.find(u => u.id === userId);
     if (!target) return { success: false, message: 'User not found.' };
 
-    target.status = target.status === 'Active' ? 'Suspended' : 'Active';
+    const nextStatus = target.status === 'Active' ? 'Suspended' : 'Active';
+
+    // Call Cloud API
+    try {
+      const response = await fetch('/api/auth?action=toggleStatus', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId })
+      });
+      const data = await response.json();
+      if (response.ok && data.user) {
+        target.status = data.user.status;
+      } else {
+        target.status = nextStatus;
+      }
+    } catch (err) {
+      target.status = nextStatus;
+    }
+
     saveUsers(users);
     return { success: true, user: target, message: `Status updated to ${target.status}.` };
   }
 
-  // Firebase Modular Hook (Ready for Firebase Web SDK v9+)
-  const FirebaseConnector = {
-    isConfigured: false,
-    config: {
-      apiKey: "YOUR_FIREBASE_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    },
-    initialize: function(customConfig) {
-      if (customConfig && customConfig.apiKey !== "YOUR_FIREBASE_API_KEY") {
-        this.config = Object.assign(this.config, customConfig);
-        this.isConfigured = true;
-        console.log("⚡ Firebase Auth Ready with project:", this.config.projectId);
+  // Save Workout Log to Firebase Firestore
+  async function logWorkout(workoutData) {
+    const current = getCurrentUser();
+    const payload = {
+      userId: current ? current.id : 'guest',
+      workoutTitle: workoutData.title || 'Performance Workout',
+      totalVolumeKg: workoutData.totalVolumeKg || 0,
+      setsCount: workoutData.setsCount || 0,
+      durationMins: workoutData.durationMins || 45
+    };
+
+    try {
+      const response = await fetch('/api/auth?action=logWorkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (response.ok) {
+        console.log('⚡ [Firebase Firestore] Workout persisted to cloud.');
       }
+    } catch (e) {
+      console.warn('Offline: workout logged locally only.');
     }
-  };
+  }
+
+  // Bootstrapping
+  initDb();
 
   return {
     getCurrentUser,
@@ -254,11 +389,15 @@ const KinetixAuth = (function() {
     logout,
     deleteUser,
     toggleUserStatus,
+    syncWithCloud,
+    logWorkout,
     validateEmail,
     validatePassword,
+    getIsCloudConnected: () => isCloudConnected,
+    getCloudStatusMessage: () => cloudStatusMessage,
     MASTER_ADMIN_EMAIL,
     MASTER_ADMIN_DEFAULT_PASS,
-    FirebaseConnector
+    FIREBASE_PROJECT_ID
   };
 })();
 

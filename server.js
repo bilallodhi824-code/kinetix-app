@@ -16,8 +16,21 @@ const MIME_TYPES = {
   '.webp': 'image/webp'
 };
 
-const server = http.createServer((req, res) => {
+let apiAuthHandler = null;
+try {
+  apiAuthHandler = require('./api/auth.js');
+} catch (e) {
+  console.warn('API Auth Handler load error:', e.message);
+}
+
+const server = http.createServer(async (req, res) => {
   let reqPath = req.url.split('?')[0];
+
+  // Delegate API requests to Firebase Auth API
+  if (reqPath.startsWith('/api/auth') && apiAuthHandler) {
+    return apiAuthHandler(req, res);
+  }
+
   if (reqPath === '/') reqPath = '/index.html';
   const filePath = path.join(__dirname, reqPath);
 
