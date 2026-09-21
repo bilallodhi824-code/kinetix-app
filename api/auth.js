@@ -79,32 +79,6 @@ async function seedDefaultUsersIfEmpty(db) {
         status: 'Active',
         lastActive: 'Just now',
         workoutsCompleted: 142
-      },
-      {
-        id: 'usr_client_01',
-        name: 'Alex Carter',
-        email: 'alex.carter@kinetix.io',
-        password: 'Password123!',
-        role: 'client',
-        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-        tier: 'ELITE ATHLETE',
-        joinedDate: '2026-09-10',
-        status: 'Active',
-        lastActive: '2h ago',
-        workoutsCompleted: 38
-      },
-      {
-        id: 'usr_client_02',
-        name: 'Elena Rostova',
-        email: 'elena.rostova@fitness.com',
-        password: 'Password123!',
-        role: 'client',
-        avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80',
-        tier: 'PRO RECOVERY',
-        joinedDate: '2026-09-14',
-        status: 'Active',
-        lastActive: '5h ago',
-        workoutsCompleted: 19
       }
     ];
 

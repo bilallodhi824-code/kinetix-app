@@ -35,40 +35,22 @@ const KinetixAuth = (function() {
           status: 'Active',
           lastActive: 'Just now',
           workoutsCompleted: 142
-        },
-        {
-          id: 'usr_client_01',
-          name: 'Alex Carter',
-          email: 'alex.carter@kinetix.io',
-          password: 'Password123!',
-          role: 'client',
-          avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
-          tier: 'ELITE ATHLETE',
-          joinedDate: '2026-09-10',
-          status: 'Active',
-          lastActive: '2h ago',
-          workoutsCompleted: 38
-        },
-        {
-          id: 'usr_client_02',
-          name: 'Elena Rostova',
-          email: 'elena.rostova@fitness.com',
-          password: 'Password123!',
-          role: 'client',
-          avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80',
-          tier: 'PRO RECOVERY',
-          joinedDate: '2026-09-14',
-          status: 'Active',
-          lastActive: '5h ago',
-          workoutsCompleted: 19
         }
       ];
       localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(initialUsers));
     }
 
-    // Automatic migration if cached session has previous name
+    // Automatic migration & cleanup of any previous mock dummy accounts
     let users = getAllUsers();
     let migrated = false;
+    
+    // Purge mock demo accounts so only real accounts and Bilal Khan exist
+    const cleanedUsers = users.filter(u => u.email !== 'alex.carter@kinetix.io' && u.email !== 'elena.rostova@fitness.com');
+    if (cleanedUsers.length !== users.length) {
+      users = cleanedUsers;
+      migrated = true;
+    }
+
     users = users.map(u => {
       if (u.email === MASTER_ADMIN_EMAIL && u.name !== 'Bilal Khan') {
         u.name = 'Bilal Khan';
@@ -81,7 +63,10 @@ const KinetixAuth = (function() {
     // Default current user if not set
     let current = getCurrentUser();
     if (!current) {
-      current = users.find(u => u.email === MASTER_ADMIN_EMAIL) || users[0];
+      current = users.find(u => u.email === MASTER_ADMIN_EMAIL) || null;
+      if (current) setCurrentUser(current);
+    } else if (current.email === 'alex.carter@kinetix.io' || current.email === 'elena.rostova@fitness.com') {
+      current = users.find(u => u.email === MASTER_ADMIN_EMAIL) || null;
       setCurrentUser(current);
     } else if (current.email === MASTER_ADMIN_EMAIL && current.name !== 'Bilal Khan') {
       current.name = 'Bilal Khan';

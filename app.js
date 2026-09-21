@@ -1902,6 +1902,11 @@ class KinetixApp {
         dropdown.style.display = 'none';
       }
     });
+
+    // Mandatory Login Gatekeeper: Prompt login if no authenticated session
+    if (!KinetixAuth.getCurrentUser()) {
+      setTimeout(() => this.openAuthModal('signin'), 500);
+    }
   }
 
   updateUserUI(user) {
@@ -2173,15 +2178,6 @@ class KinetixApp {
     const passEl = document.getElementById('signInPassword');
     if (emailEl) emailEl.value = KinetixAuth.MASTER_ADMIN_EMAIL;
     if (passEl) passEl.value = KinetixAuth.MASTER_ADMIN_DEFAULT_PASS;
-    this.submitSignIn();
-  }
-
-  quickFillClient() {
-    this.switchAuthTab('signin');
-    const emailEl = document.getElementById('signInEmail');
-    const passEl = document.getElementById('signInPassword');
-    if (emailEl) emailEl.value = 'alex.carter@kinetix.io';
-    if (passEl) passEl.value = 'Password123!';
     this.submitSignIn();
   }
 
