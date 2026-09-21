@@ -2,16 +2,16 @@
   "version": 2,
   "builds": [
     {
-      "src": "{index.html,styles.css,app.js,auth.js,sw.js,manifest.json,icon.svg,*.png,*.jpg,assets/**}",
-      "use": "@vercel/static"
-    },
-    {
       "src": "api/auth.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "{index.html,styles.css,app.js,auth.js,sw.js,manifest.json,icon.svg,*.png,*.jpg,assets/**}",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/api/auth.*", "dest": "/api/auth.js" },
     { "src": "/(.*)", "dest": "/$1" }
   ]
 }
