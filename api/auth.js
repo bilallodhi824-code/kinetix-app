@@ -69,7 +69,7 @@ async function seedDefaultUsersIfEmpty(db) {
     const defaultAthletes = [
       {
         id: 'usr_admin_01',
-        name: 'Bilal Lodhi',
+        name: 'Bilal Khan',
         email: MASTER_ADMIN_EMAIL,
         password: MASTER_ADMIN_DEFAULT_PASS,
         role: 'admin',
@@ -112,12 +112,12 @@ async function seedDefaultUsersIfEmpty(db) {
       await usersCol.doc(athlete.id).set(athlete);
     }
   } else {
-    // Ensure Bilal Master Admin is always present
+    // Ensure Bilal Khan Master Admin is always up-to-date and present
     const adminDoc = await usersCol.where('email', '==', MASTER_ADMIN_EMAIL).limit(1).get();
     if (adminDoc.empty) {
       await usersCol.doc('usr_admin_01').set({
         id: 'usr_admin_01',
-        name: 'Bilal Lodhi',
+        name: 'Bilal Khan',
         email: MASTER_ADMIN_EMAIL,
         password: MASTER_ADMIN_DEFAULT_PASS,
         role: 'admin',
@@ -128,6 +128,11 @@ async function seedDefaultUsersIfEmpty(db) {
         lastActive: 'Just now',
         workoutsCompleted: 142
       });
+    } else {
+      const doc = adminDoc.docs[0];
+      if (doc.data().name !== 'Bilal Khan') {
+        await doc.ref.update({ name: 'Bilal Khan' });
+      }
     }
   }
 }

@@ -552,6 +552,8 @@ class KinetixApp {
     this.renderProgramCards();
     this.bindHIITTimer();
     this.bindCalculators();
+    this.bindBodyCompositionAndPlanner();
+    this.initAiCoach();
     this.bindLogger();
     this.renderHistoryAndCharts();
     this.renderAdminDashboard();
@@ -1283,6 +1285,324 @@ class KinetixApp {
   }
 
   // ==========================================================================
+  // BODY COMPOSITION & WEIGHT DEFICIT PLANNER ENGINE
+  // ==========================================================================
+  bindBodyCompositionAndPlanner() {
+    // 1. Precision Body Composition (BMI & US Navy Body Fat)
+    const calcBodyComp = () => {
+      const gender = document.getElementById('compGender')?.value || 'male';
+      const weight = parseFloat(document.getElementById('compWeight')?.value) || 82.5;
+      const height = parseFloat(document.getElementById('compHeight')?.value) || 182;
+      const neck = parseFloat(document.getElementById('compNeck')?.value) || 40;
+      const waist = parseFloat(document.getElementById('compWaist')?.value) || 84;
+      const hip = parseFloat(document.getElementById('compHip')?.value) || 98;
+
+      const hipField = document.getElementById('compHipField');
+      if (hipField) {
+        hipField.style.display = (gender === 'female') ? 'block' : 'none';
+      }
+
+      // BMI Formula = weight (kg) / (height(m))^2
+      const heightM = height / 100;
+      const bmi = (weight / (heightM * heightM)).toFixed(1);
+
+      // BMI pointer percentage (15 to 35 range mapped to 0% to 100%)
+      const bmiMin = 15;
+      const bmiMax = 35;
+      const clampedBmi = Math.max(bmiMin, Math.min(bmiMax, parseFloat(bmi)));
+      const bmiPointerPct = Math.round(((clampedBmi - bmiMin) / (bmiMax - bmiMin)) * 100);
+
+      // US Navy Body Fat % Formula
+      let bodyFat = 15;
+      if (gender === 'male') {
+        const diff = waist - neck;
+        if (diff > 0 && height > 0) {
+          bodyFat = 495 / (1.0324 - 0.19077 * Math.log10(diff) + 0.15456 * Math.log10(height)) - 450;
+        }
+      } else {
+        const diff = waist + hip - neck;
+        if (diff > 0 && height > 0) {
+          bodyFat = 495 / (1.29579 - 0.35004 * Math.log10(diff) + 0.22100 * Math.log10(height)) - 450;
+        }
+      }
+      bodyFat = Math.max(4, Math.min(50, bodyFat));
+      const bfPct = bodyFat.toFixed(1);
+
+      // Functional Lean Mass vs Fat Mass
+      const fatMassKg = (weight * (bodyFat / 100)).toFixed(1);
+      const leanMassKg = (weight - parseFloat(fatMassKg)).toFixed(1);
+
+      // Classification Category
+      let category = 'FITNESS / ATHLETIC';
+      if (gender === 'male') {
+        if (bodyFat < 6) category = 'ESSENTIAL FAT (COMPETITION DRY)';
+        else if (bodyFat <= 13) category = 'ELITE ATHLETE (SHREDDED)';
+        else if (bodyFat <= 17) category = 'ATHLETIC FITNESS';
+        else if (bodyFat <= 24) category = 'AVERAGE HEALTHY';
+        else category = 'ADIPOSE SURPLUS (CUT RECOMMENDED)';
+      } else {
+        if (bodyFat < 14) category = 'ESSENTIAL FAT (COMPETITION DRY)';
+        else if (bodyFat <= 20) category = 'ELITE ATHLETE (SHREDDED)';
+        else if (bodyFat <= 24) category = 'ATHLETIC FITNESS';
+        else if (bodyFat <= 31) category = 'AVERAGE HEALTHY';
+        else category = 'ADIPOSE SURPLUS (CUT RECOMMENDED)';
+      }
+
+      // Update DOM
+      const bmiEl = document.getElementById('compBmiVal');
+      const bfEl = document.getElementById('compBfVal');
+      const pointerEl = document.getElementById('compBmiPointer');
+      const leanEl = document.getElementById('compLeanMassVal');
+      const fatEl = document.getElementById('compFatMassVal');
+      const catEl = document.getElementById('compCategoryBadge');
+
+      if (bmiEl) bmiEl.textContent = bmi;
+      if (bfEl) bfEl.textContent = `${bfPct}%`;
+      if (pointerEl) pointerEl.style.left = `${bmiPointerPct}%`;
+      if (leanEl) leanEl.textContent = `${leanMassKg} kg`;
+      if (fatEl) fatEl.textContent = `${fatMassKg} kg`;
+      if (catEl) catEl.textContent = category;
+    };
+
+    ['compGender', 'compWeight', 'compHeight', 'compNeck', 'compWaist', 'compHip'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', calcBodyComp);
+    });
+    calcBodyComp();
+
+    // 2. Weight Deficit & Workout Caloric Projection Simulator
+    const calcWeightProjection = () => {
+      const currentW = parseFloat(document.getElementById('planCurrentWeight')?.value) || 85;
+      const targetW = parseFloat(document.getElementById('planTargetWeight')?.value) || 78;
+      const burnRatePerMin = parseFloat(document.getElementById('planExerciseType')?.value) || 8.5;
+      const durationMins = parseFloat(document.getElementById('planDuration')?.value) || 60;
+      const frequencyDays = parseFloat(document.getElementById('planFrequency')?.value) || 4;
+      const dietDeficitDaily = parseFloat(document.getElementById('planDietDeficit')?.value) || 500;
+
+      // Calories burned per workout: duration * rate * (weight / 75kg baseline)
+      const weightFactor = currentW / 75;
+      const sessionBurn = Math.round(durationMins * burnRatePerMin * weightFactor);
+
+      // Weekly exercise burn + dietary deficit
+      const weeklyExerciseBurn = sessionBurn * frequencyDays;
+      const weeklyDietDeficit = dietDeficitDaily * 7;
+      const weeklyTotalDeficit = weeklyExerciseBurn + weeklyDietDeficit;
+
+      // 1kg fat deficit = ~7,700 kcal
+      const weeklyWeightLossKg = (weeklyTotalDeficit / 7700);
+      const totalWeightToLose = currentW - targetW;
+
+      let estWeeks = 0;
+      if (totalWeightToLose > 0 && weeklyWeightLossKg > 0) {
+        estWeeks = (totalWeightToLose / weeklyWeightLossKg).toFixed(1);
+      } else if (totalWeightToLose <= 0) {
+        estWeeks = '0.0';
+      }
+
+      // UI update
+      const sessionEl = document.getElementById('planSessionBurnVal');
+      const weeklyDefEl = document.getElementById('planWeeklyDeficitVal');
+      const weeklyRateEl = document.getElementById('planWeeklyRateVal');
+      const estWeeksEl = document.getElementById('planEstWeeksVal');
+
+      if (sessionEl) sessionEl.textContent = `${sessionBurn} kcal`;
+      if (weeklyDefEl) weeklyDefEl.textContent = `${weeklyTotalDeficit.toLocaleString()} kcal`;
+      if (weeklyRateEl) weeklyRateEl.textContent = `-${weeklyWeightLossKg.toFixed(2)} kg/wk`;
+      if (estWeeksEl) estWeeksEl.textContent = `${estWeeks} Wks`;
+
+      // Milestones timeline
+      const timelineEl = document.getElementById('planMilestonesTimeline');
+      if (timelineEl) {
+        const milestones = [
+          { label: 'Week 2', weeks: 2 },
+          { label: 'Week 4', weeks: 4 },
+          { label: 'Week 8', weeks: 8 },
+          { label: 'Target Reached', weeks: parseFloat(estWeeks) || 10 }
+        ];
+
+        timelineEl.innerHTML = milestones.map(m => {
+          const projectedW = Math.max(targetW, currentW - (weeklyWeightLossKg * m.weeks));
+          const date = new Date();
+          date.setDate(date.getDate() + Math.round(m.weeks * 7));
+          const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          const drop = (currentW - projectedW).toFixed(1);
+
+          return `
+            <div class="milestone-row">
+              <div class="milestone-week">${m.label} <span style="font-size: 0.72rem; color: var(--text-muted);">(${dateStr})</span></div>
+              <div class="milestone-weight">${projectedW.toFixed(1)} kg</div>
+              <div class="milestone-loss">-${drop} kg drop</div>
+            </div>
+          `;
+        }).join('');
+      }
+    };
+
+    ['planCurrentWeight', 'planTargetWeight', 'planExerciseType', 'planDuration', 'planFrequency', 'planDietDeficit'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', calcWeightProjection);
+    });
+    calcWeightProjection();
+  }
+
+  // ==========================================================================
+  // KINETIX NEURAL AI COACH LAB
+  // ==========================================================================
+  initAiCoach() {
+    const defaultHistory = [
+      {
+        sender: 'bot',
+        text: `Greetings, Athlete. I am the <strong>Kinetix Athletic Neural Coach</strong>, specialized strictly in biomechanics, sports physiology, hypertrophy periodization, and caloric deficit science.<br><br>I have synced with your active performance profile (<strong>${KinetixAuth.getCurrentUser()?.name || 'Bilal Khan'}</strong>). Ask me anything regarding your workouts, 1RM loading, BMI, fat loss trajectory, or movement execution cues.`
+      }
+    ];
+
+    const saved = localStorage.getItem('kinetix_ai_chat_history');
+    this.aiChatHistory = saved ? JSON.parse(saved) : defaultHistory;
+    this.renderAiChatFeed();
+  }
+
+  renderAiChatFeed() {
+    const feed = document.getElementById('aiChatFeed');
+    if (!feed) return;
+
+    feed.innerHTML = this.aiChatHistory.map(msg => `
+      <div class="ai-message ${msg.sender === 'user' ? 'user-msg' : 'bot-msg'}">
+        <div class="ai-msg-avatar">${msg.sender === 'user' ? 'YOU' : 'AI'}</div>
+        <div class="ai-msg-bubble">${msg.text}</div>
+      </div>
+    `).join('');
+
+    feed.scrollTop = feed.scrollHeight;
+  }
+
+  sendAiPrompt(promptText) {
+    const input = document.getElementById('aiCoachInput');
+    if (input) {
+      input.value = promptText;
+      this.handleAiSubmit();
+    }
+  }
+
+  clearAiChat() {
+    localStorage.removeItem('kinetix_ai_chat_history');
+    this.initAiCoach();
+    this.showToast('AI Coach chat history cleared.');
+  }
+
+  handleAiSubmit() {
+    const input = document.getElementById('aiCoachInput');
+    if (!input || !input.value.trim()) return;
+
+    const userText = input.value.trim();
+    input.value = '';
+
+    // Add user message
+    this.aiChatHistory.push({ sender: 'user', text: userText });
+    this.renderAiChatFeed();
+
+    // Generate specialized athletic response
+    setTimeout(() => {
+      const botResponse = this.generateAthleticAiResponse(userText);
+      this.aiChatHistory.push({ sender: 'bot', text: botResponse });
+      localStorage.setItem('kinetix_ai_chat_history', JSON.stringify(this.aiChatHistory));
+      this.renderAiChatFeed();
+    }, 300);
+  }
+
+  generateAthleticAiResponse(query) {
+    const q = query.toLowerCase();
+    const currentUser = KinetixAuth.getCurrentUser();
+    const athleteName = currentUser ? currentUser.name : 'Bilal Khan';
+
+    // Strict Domain Guardrail Check
+    const fitnessKeywords = [
+      'workout', 'exercise', 'gym', 'weight', 'loss', 'fat', 'muscle', 'bench', 'squat',
+      'deadlift', 'protein', 'calories', 'deficit', 'surplus', 'macro', 'bmi', 'body fat',
+      'reps', 'sets', 'rpe', 'cardio', 'hiit', 'hydration', 'water', 'sleep', 'recovery',
+      'split', 'hypertrophy', 'strength', 'creatine', 'diet', 'cut', 'bulk', 'chest', 'back',
+      'legs', 'biceps', 'triceps', 'abs', 'core', 'push', 'pull', 'bilal', 'volume', 'pr',
+      '1rm', 'tone', 'endurance', 'tempo', 'nutrition', 'training', 'metabolism'
+    ];
+
+    const isFitnessRelated = fitnessKeywords.some(kw => q.includes(kw));
+
+    if (!isFitnessRelated) {
+      return `⚠️ <strong>Guardrail Notice:</strong> I am strictly configured as the <strong>Kinetix Athletic &amp; Biomechanics AI Coach</strong>. I do not answer non-fitness or unrelated queries.<br><br>Please ask questions specifically regarding:
+        <ul>
+          <li><strong>Strength &amp; Hypertrophy Programming</strong> (PPL, Upper/Lower, 1RM loading)</li>
+          <li><strong>Body Composition &amp; BMI</strong> (Body fat reduction, US Navy formula)</li>
+          <li><strong>Workout Caloric Burn &amp; Weight Deficit Planning</strong></li>
+          <li><strong>Movement Biomechanics &amp; Injury Prevention</strong></li>
+        </ul>`;
+    }
+
+    // Specialized Domain Answers
+    if (q.includes('bmi') || q.includes('body fat')) {
+      const weight = document.getElementById('compWeight')?.value || '82.5';
+      const height = document.getElementById('compHeight')?.value || '182';
+      const bmi = document.getElementById('compBmiVal')?.textContent || '24.9';
+      const bf = document.getElementById('compBfVal')?.textContent || '13.8%';
+      return `📊 <strong>Body Composition Analysis for ${athleteName}:</strong><br><br>
+        Based on your current biometric metrics (Weight: <strong>${weight}kg</strong>, Height: <strong>${height}cm</strong>):
+        <ul>
+          <li><strong>Calculated BMI:</strong> ${bmi} (Optimal Athletic Functional Range)</li>
+          <li><strong>Estimated Body Fat:</strong> ${bf} via U.S. Navy Biometric algorithm</li>
+          <li><strong>Nutritional Recommendation:</strong> Maintain lean muscular density with <strong>1.8g - 2.2g protein per kg</strong> (~${Math.round(weight * 2.2)}g daily). If initiating a cut, establish a 400-500 kcal deficit while keeping compound intensity at RPE 8.</li>
+        </ul>`;
+    }
+
+    if (q.includes('drop') || q.includes('loss') || q.includes('burn') || q.includes('cardio') || q.includes('5kg') || q.includes('weight')) {
+      return `🔥 <strong>Target Deficit &amp; Weight Reduction Protocol:</strong><br><br>
+        To shed <strong>5 kg of adipose tissue</strong> without losing contractile muscle density:
+        <ol>
+          <li><strong>Caloric Energy Equation:</strong> 1kg of human fat equals approximately <strong>7,700 kcal</strong>. Dropping 5kg requires a cumulative deficit of <strong>38,500 kcal</strong>.</li>
+          <li><strong>Optimal Pace:</strong> A sustainable rate is <strong>0.5kg - 0.75kg per week</strong> (~500 - 750 kcal daily net deficit).</li>
+          <li><strong>Exercise Prescription:</strong> 4 weekly sessions of 45-60 mins (combining Heavy Resistance Training + 15 min HIIT finisher) burns ~<strong>2,400 kcal/week</strong>.</li>
+          <li><strong>Projected Timeline:</strong> At this rate, you will hit your 5kg target in approximately <strong>7 to 8 weeks</strong> while keeping strength PRs intact!</li>
+        </ol>`;
+    }
+
+    if (q.includes('split') || q.includes('routine') || q.includes('hypertrophy') || q.includes('upper') || q.includes('lower') || q.includes('4-day')) {
+      return `⚡ <strong>Recommended 4-Day Periodized Athletic Split:</strong><br><br>
+        <ul>
+          <li><strong>Day 1 (Monday) - Upper Power:</strong> Barbell Flat Bench (3x5), Neutral Pull-Ups (3x6), Overhead Press (3x6), Cable Chest Flye (3x10).</li>
+          <li><strong>Day 2 (Tuesday) - Lower Biomechanics:</strong> Barbell Back Squat (3x5), Romanian Deadlift (3x8), Bulgarian Split Squat (3x10/leg), Standing Calf Raises (4x12).</li>
+          <li><strong>Day 3 (Wednesday):</strong> Active CNS Recovery &amp; Mobility / 20 min Zone 2 Cardio.</li>
+          <li><strong>Day 4 (Thursday) - Upper Hypertrophy:</strong> Incline DB Press (4x8-10), Chest-Supported DB Row (4x10), Lateral Raises (4x15), Tricep Dips (3x12).</li>
+          <li><strong>Day 5 (Friday) - Lower Posterior &amp; Core:</strong> Conventional Deadlift (3x5), Leg Press (3x12), Hamstring Curls (3x12), Hanging Leg Raises (4x15).</li>
+        </ul>
+        Maintain <strong>RPE 7-8</strong> on primary compounds and leave 1-2 Reps in Reserve (RIR).`;
+    }
+
+    if (q.includes('bench') || q.includes('1rm') || q.includes('increase') || q.includes('squat') || q.includes('deadlift')) {
+      return `🏋️ <strong>1RM Progression &amp; Biomechanical Optimization:</strong><br><br>
+        To break past plateaus on compound lifts:
+        <ul>
+          <li><strong>Scapular Retraction &amp; Arch:</strong> Lock your shoulder blades into the bench to minimize stroke distance and engage the lower pectorals.</li>
+          <li><strong>Bar Path:</strong> Do not press in a straight vertical line; press in a slight backward J-curve toward your eye level.</li>
+          <li><strong>Wave Loading:</strong> Cycle weeks with 85% 1RM (3-4 reps), 90% 1RM (2 reps), and 70% deload to allow CNS neuro-muscular adaptation.</li>
+          <li><strong>Assistance Work:</strong> Strengthen triceps lockout with Weighted Dips and Close-Grip Bench.</li>
+        </ul>`;
+    }
+
+    if (q.includes('protein') || q.includes('water') || q.includes('diet') || q.includes('hydration') || q.includes('creatine')) {
+      return `🥗 <strong>Precision Sports Nutrition Guidelines for ${athleteName}:</strong><br><br>
+        <ul>
+          <li><strong>Protein Target:</strong> 2.0g - 2.2g per kg bodyweight. Prioritize complete amino acid profiles (Whey isolate, eggs, lean beef, chicken, Greek yogurt).</li>
+          <li><strong>Creatine Monohydrate:</strong> 5g daily consistently (no loading phase needed) for ATP phosphocreatine cellular saturation.</li>
+          <li><strong>Hydration Target:</strong> 3.5 to 4.0 Liters daily. During heavy training sessions, add 500mg sodium and electrolytes to maintain intra-cellular osmolarity and muscular pumps.</li>
+          <li><strong>Pre-Workout Fuel:</strong> 40g easily digestible complex carbohydrates 60-90 minutes prior to lifting.</li>
+        </ul>`;
+    }
+
+    // General athletic fallback
+    return `⚡ <strong>Athletic Status Insight for ${athleteName}:</strong><br><br>
+      High-performance biomechanics requires balancing <strong>Mechanical Tension</strong>, <strong>Metabolic Stress</strong>, and <strong>Central Nervous System Recovery</strong>.<br><br>
+      Your active profile currently holds <strong>${currentUser?.workoutsCompleted || 142} recorded sessions</strong> in Google Cloud Firestore. Your readiness score is primed.<br><br>
+      Feel free to ask about specific exercise cues (e.g. <em>deadlift hip hinge</em>, <em>squat knee tracking</em>), calorie deficit calculations, or your personal 1RM percentages!`;
+  }
+
+  // ==========================================================================
   // WORKOUT LOGGER & TELEMETRY
   // ==========================================================================
   bindLogger() {
@@ -1653,38 +1973,112 @@ class KinetixApp {
     dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
   }
 
-  openAuthModal(defaultTab = 'signin') {
+  openAuthModal(defaultTab = 'switch') {
     const modal = document.getElementById('authModal');
     if (modal) {
       this.switchAuthTab(defaultTab);
+      modal.classList.add('open');
       modal.classList.add('active');
     }
   }
 
   closeAuthModal() {
     const modal = document.getElementById('authModal');
-    if (modal) modal.classList.remove('active');
+    if (modal) {
+      modal.classList.remove('open');
+      modal.classList.remove('active');
+    }
     this.hideAuthAlert();
   }
 
   switchAuthTab(tab) {
+    const btnSwitch = document.getElementById('tabBtnSwitch');
     const btnSignIn = document.getElementById('tabBtnSignIn');
     const btnRegister = document.getElementById('tabBtnRegister');
+    const formSwitch = document.getElementById('switchForm');
     const formSignIn = document.getElementById('signInForm');
     const formRegister = document.getElementById('registerForm');
 
     this.hideAuthAlert();
 
-    if (tab === 'signin') {
+    [btnSwitch, btnSignIn, btnRegister].forEach(b => b && b.classList.remove('active'));
+    [formSwitch, formSignIn, formRegister].forEach(f => f && (f.style.display = 'none'));
+
+    if (tab === 'switch') {
+      if (btnSwitch) btnSwitch.classList.add('active');
+      if (formSwitch) formSwitch.style.display = 'block';
+      this.renderSwitchUserList();
+    } else if (tab === 'signin') {
       if (btnSignIn) btnSignIn.classList.add('active');
-      if (btnRegister) btnRegister.classList.remove('active');
       if (formSignIn) formSignIn.style.display = 'block';
-      if (formRegister) formRegister.style.display = 'none';
-    } else {
-      if (btnSignIn) btnSignIn.classList.remove('active');
+    } else if (tab === 'register') {
       if (btnRegister) btnRegister.classList.add('active');
-      if (formSignIn) formSignIn.style.display = 'none';
       if (formRegister) formRegister.style.display = 'block';
+    }
+  }
+
+  renderSwitchUserList() {
+    const listEl = document.getElementById('switchUserList');
+    if (!listEl) return;
+
+    const users = KinetixAuth.getAllUsers();
+    const currentUser = KinetixAuth.getCurrentUser();
+
+    if (!users || users.length === 0) {
+      listEl.innerHTML = `
+        <div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+          No profiles loaded. Synchronizing with cloud database...
+        </div>
+      `;
+      return;
+    }
+
+    listEl.innerHTML = users.map(u => {
+      const isCurrent = currentUser && (currentUser.id === u.id || currentUser.email.toLowerCase() === u.email.toLowerCase());
+      const isMaster = u.email === KinetixAuth.MASTER_ADMIN_EMAIL;
+
+      return `
+        <div class="auth-user-card ${isCurrent ? 'current-active' : ''}">
+          <div class="auth-user-info">
+            <img src="${u.avatar}" alt="${u.name}" class="auth-user-avatar">
+            <div>
+              <div class="auth-user-name">
+                <span>${u.name}</span>
+                ${isMaster ? '<span class="role-badge-tag admin" style="font-size: 0.65rem; padding: 2px 6px;">MASTER ADMIN</span>' : '<span class="role-badge-tag client" style="font-size: 0.65rem; padding: 2px 6px;">ATHLETE</span>'}
+              </div>
+              <div class="auth-user-sub">${u.email} • ${u.workoutsCompleted || 0} Sessions</div>
+            </div>
+          </div>
+          <div>
+            ${isCurrent ? `
+              <span class="auth-active-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                Active
+              </span>
+            ` : `
+              <button class="auth-switch-btn" onclick="app.switchProfile('${u.id}')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line></svg>
+                Switch
+              </button>
+            `}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  switchProfile(userId) {
+    const res = KinetixAuth.switchUser(userId);
+    if (!res.success) {
+      this.showAuthAlert(res.message, 'error');
+      return;
+    }
+    this.closeAuthModal();
+    this.updateUserUI(res.user);
+    this.showToast(res.message);
+
+    if (res.user.role === 'admin') {
+      this.renderAdminDashboard();
     }
   }
 
@@ -1740,7 +2134,7 @@ class KinetixApp {
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = '<span>Sign In to Dashboard</span>';
+        submitBtn.innerHTML = '<span>Log In to Cockpit</span>';
       }
     }
   }
@@ -1795,9 +2189,9 @@ class KinetixApp {
     KinetixAuth.logout();
     const dropdown = document.getElementById('headerUserDropdown');
     if (dropdown) dropdown.style.display = 'none';
+    this.updateUserUI(null);
     this.showToast('Signed out of session.');
-    const dashNav = document.querySelector('.nav-item[data-tab="dashboard"]');
-    if (dashNav) dashNav.click();
+    this.openAuthModal('switch');
   }
 
   // ========================================================================

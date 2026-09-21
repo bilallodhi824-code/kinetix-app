@@ -125,6 +125,18 @@
           <span>Telemetry & PRs</span>
         </div>
 
+        <div class="nav-item" data-tab="ai-coach">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path>
+            <path d="M4 11a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7z"></path>
+            <circle cx="9" cy="14" r="1.5"></circle>
+            <circle cx="15" cy="14" r="1.5"></circle>
+            <path d="M9 18h6"></path>
+          </svg>
+          <span>AI Coach Lab</span>
+          <span class="nav-badge" style="background: var(--accent-cyan-dim); color: var(--accent-cyan); font-weight: 700;">AI</span>
+        </div>
+
         <div class="nav-category-title admin-only-nav" id="adminNavCategory" style="display: none;">Master Control</div>
 
         <div class="nav-item admin-only-nav" data-tab="admin" id="adminNavItem" style="display: none;">
@@ -137,10 +149,10 @@
       </nav>
 
       <div class="sidebar-footer">
-        <div class="user-snippet" id="sidebarUserSnippet" onclick="app.openAuthModal()" style="cursor: pointer;" title="Click to manage account">
-          <div class="user-avatar" id="sidebarUserAvatar">BL</div>
+        <div class="user-snippet" id="sidebarUserSnippet" onclick="app.openAuthModal('switch')" style="cursor: pointer;" title="Click to switch or manage account">
+          <div class="user-avatar" id="sidebarUserAvatar">BK</div>
           <div class="user-info-text">
-            <div class="user-name" id="sidebarUserName">Bilal Lodhi</div>
+            <div class="user-name" id="sidebarUserName">Bilal Khan</div>
             <div class="user-tier" id="sidebarUserTier">HEAD OF PERFORMANCE</div>
           </div>
         </div>
@@ -183,7 +195,7 @@
           <div class="header-user-badge" id="headerUserBadge" onclick="app.toggleUserMenu(event)">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="User Avatar" class="header-avatar" id="headerUserAvatar">
             <div class="header-user-meta">
-              <span class="header-user-name" id="headerUserName">Bilal Lodhi</span>
+              <span class="header-user-name" id="headerUserName">Bilal Khan</span>
               <span class="header-role-pill" id="headerUserRoleBadge">ADMIN</span>
             </div>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -191,7 +203,7 @@
             <!-- Dropdown Menu -->
             <div class="header-dropdown" id="headerUserDropdown" style="display: none;">
               <div class="dropdown-header">
-                <div class="dropdown-title" id="dropdownUserName">Bilal Lodhi</div>
+                <div class="dropdown-title" id="dropdownUserName">Bilal Khan</div>
                 <div class="dropdown-email" id="dropdownUserEmail">bilallodhi824@gmail.com</div>
               </div>
               <div class="dropdown-divider"></div>
@@ -199,9 +211,9 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                 <span>Open Admin Portal</span>
               </button>
-              <button class="dropdown-item" onclick="app.openAuthModal()">
+              <button class="dropdown-item" onclick="app.openAuthModal('switch')">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg>
-                <span>Switch / Sign In Account</span>
+                <span>Switch Athlete Profile</span>
               </button>
               <button class="dropdown-item item-danger" onclick="app.logout()">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
@@ -953,6 +965,238 @@
                 </div>
               </div>
             </div>
+
+            <!-- Card 3: Body Composition (BMI & US Navy Body Fat %) -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2"></path>
+                  </svg>
+                  <span>Precision Body Composition &amp; BMI Lab</span>
+                </h3>
+                <span class="tag-chip tag-cyan">U.S. NAVY METHOD</span>
+              </div>
+
+              <div class="calc-form-grid">
+                <div>
+                  <label class="form-label">Biological Gender</label>
+                  <select class="calc-select" id="compGender">
+                    <option value="male" selected>Male (Athletic)</option>
+                    <option value="female">Female (Athletic)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label">Current Weight (kg)</label>
+                  <input type="number" class="calc-input" id="compWeight" value="82.5" step="0.5">
+                </div>
+                <div>
+                  <label class="form-label">Height (cm)</label>
+                  <input type="number" class="calc-input" id="compHeight" value="182">
+                </div>
+                <div>
+                  <label class="form-label">Neck Circumference (cm)</label>
+                  <input type="number" class="calc-input" id="compNeck" value="40" step="0.5">
+                </div>
+                <div>
+                  <label class="form-label">Waist at Navel (cm)</label>
+                  <input type="number" class="calc-input" id="compWaist" value="84" step="0.5">
+                </div>
+                <div id="compHipField" style="display: none;">
+                  <label class="form-label">Hip Circumference (cm)</label>
+                  <input type="number" class="calc-input" id="compHip" value="98" step="0.5">
+                </div>
+              </div>
+
+              <div class="macro-results-panel">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                  <div>
+                    <div style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase;">Body Mass Index (BMI)</div>
+                    <div class="calories-hero-number" id="compBmiVal" style="color: var(--accent-cyan); font-size: 2.2rem;">24.9</div>
+                  </div>
+                  <div style="text-align: right;">
+                    <div style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase;">Estimated Body Fat</div>
+                    <div class="calories-hero-number" id="compBfVal" style="color: var(--accent-lime); font-size: 2.2rem;">13.8%</div>
+                  </div>
+                </div>
+
+                <!-- Visual BMI Meter Track -->
+                <div class="bmi-meter-track">
+                  <div class="bmi-meter-pointer" id="compBmiPointer" style="left: 45%;"></div>
+                </div>
+                <div class="bmi-categories-legend">
+                  <span>Under &lt;18.5</span>
+                  <span style="color: var(--accent-lime);">Optimal 18.5-24.9</span>
+                  <span style="color: var(--accent-orange);">Over 25-29.9</span>
+                  <span>Obese 30+</span>
+                </div>
+
+                <!-- Lean vs Fat Mass Split -->
+                <div class="bodycomp-split-row">
+                  <div class="bodycomp-split-box">
+                    <div class="bodycomp-split-val" id="compLeanMassVal" style="color: var(--accent-cyan);">71.1 kg</div>
+                    <div class="bodycomp-split-lbl">Lean Functional Mass</div>
+                  </div>
+                  <div class="bodycomp-split-box">
+                    <div class="bodycomp-split-val" id="compFatMassVal" style="color: var(--accent-orange);">11.4 kg</div>
+                    <div class="bodycomp-split-lbl">Total Adipose Mass</div>
+                  </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--border-subtle); font-size: 0.82rem; font-family: var(--font-mono);">
+                  <span style="color: var(--text-muted);">Physiological Classification:</span>
+                  <span id="compCategoryBadge" style="color: var(--accent-lime); font-weight: 700;">ATHLETE (FITNESS TIER)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4: Caloric Deficit & Exercise Weight Projection Engine -->
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 20V10"></path>
+                    <path d="M12 20V4"></path>
+                    <path d="M6 20v-6"></path>
+                  </svg>
+                  <span>Weight &amp; Caloric Deficit Simulator</span>
+                </h3>
+                <span class="tag-chip tag-lime">PROJECTION ENGINE</span>
+              </div>
+
+              <div class="calc-form-grid">
+                <div>
+                  <label class="form-label">Current Weight (kg)</label>
+                  <input type="number" class="calc-input" id="planCurrentWeight" value="85" step="0.5">
+                </div>
+                <div>
+                  <label class="form-label">Target Goal Weight (kg)</label>
+                  <input type="number" class="calc-input" id="planTargetWeight" value="78" step="0.5">
+                </div>
+                <div class="calc-field-full">
+                  <label class="form-label">Primary Exercise Protocol</label>
+                  <select class="calc-select" id="planExerciseType">
+                    <option value="12">HIIT / High-Intensity Metabolic Intervals (~12 kcal/min)</option>
+                    <option value="8.5" selected>Heavy Compound Weightlifting &amp; Hypertrophy (~8.5 kcal/min)</option>
+                    <option value="11">Sprint Conditioning / Running Pace (~11 kcal/min)</option>
+                    <option value="10">Combat Sports / Boxing Conditioning (~10 kcal/min)</option>
+                    <option value="7">Low-Intensity Steady Cardio / Cycling (~7 kcal/min)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label">Session Duration (Minutes)</label>
+                  <select class="calc-select" id="planDuration">
+                    <option value="30">30 min (Express)</option>
+                    <option value="45">45 min (Standard)</option>
+                    <option value="60" selected>60 min (Full Lab Session)</option>
+                    <option value="75">75 min (High-Volume)</option>
+                    <option value="90">90 min (Extended Elite)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="form-label">Training Days / Week</label>
+                  <select class="calc-select" id="planFrequency">
+                    <option value="3">3 Days / Week</option>
+                    <option value="4" selected>4 Days / Week (Upper/Lower)</option>
+                    <option value="5">5 Days / Week (PPL Split)</option>
+                    <option value="6">6 Days / Week (Pro Volume)</option>
+                  </select>
+                </div>
+                <div class="calc-field-full">
+                  <label class="form-label">Dietary Deficit (Nutrition Intake Adjustment)</label>
+                  <select class="calc-select" id="planDietDeficit">
+                    <option value="0">Exercise Only (No Dietary Change, 0 kcal deficit)</option>
+                    <option value="300">Moderate Dietary Cut (-300 kcal/day)</option>
+                    <option value="500" selected>Aggressive Athletic Cut (-500 kcal/day)</option>
+                    <option value="750">Steep Competition Cut (-750 kcal/day)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Real-Time Projection Output -->
+              <div class="macro-results-panel">
+                <div class="projection-stat-grid">
+                  <div class="projection-stat-card">
+                    <div class="projection-stat-val" id="planSessionBurnVal">510 kcal</div>
+                    <div class="projection-stat-lbl">Per Session Burn</div>
+                  </div>
+                  <div class="projection-stat-card cyan">
+                    <div class="projection-stat-val" id="planWeeklyDeficitVal">5,540 kcal</div>
+                    <div class="projection-stat-lbl">Weekly Net Deficit</div>
+                  </div>
+                  <div class="projection-stat-card orange">
+                    <div class="projection-stat-val" id="planWeeklyRateVal">-0.72 kg</div>
+                    <div class="projection-stat-lbl">Weekly Weight Drop</div>
+                  </div>
+                  <div class="projection-stat-card">
+                    <div class="projection-stat-val" id="planEstWeeksVal" style="color: var(--accent-lime);">9.7 Wks</div>
+                    <div class="projection-stat-lbl">Target Timeframe</div>
+                  </div>
+                </div>
+
+                <!-- Milestone Roadmap -->
+                <div style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-muted); text-transform: uppercase; margin-top: 14px;">Projected Milestone Trajectory</div>
+                <div class="milestones-timeline" id="planMilestonesTimeline">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================================================================
+             TAB: KINETIX NEURAL AI COACH LAB
+             ================================================================ -->
+        <section class="tab-view" id="view-ai-coach">
+          <div class="ai-coach-wrap">
+            <div class="ai-coach-header">
+              <div class="ai-coach-title-group">
+                <div class="ai-coach-avatar-box">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path>
+                    <path d="M4 11a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7z"></path>
+                    <circle cx="9" cy="14" r="1.5"></circle>
+                    <circle cx="15" cy="14" r="1.5"></circle>
+                    <path d="M9 18h6"></path>
+                  </svg>
+                </div>
+                <div>
+                  <div class="ai-coach-name">
+                    <span>Kinetix Athletic AI Coach</span>
+                    <span class="tag-chip tag-lime" style="font-size: 0.7rem; padding: 2px 8px;">ACTIVE KERNEL</span>
+                  </div>
+                  <div class="ai-coach-status">TRAINED ON ATHLETE BIOMECHANICS, HYPERTROPHY &amp; NUTRITIONAL SCIENCE</div>
+                </div>
+              </div>
+              <button class="btn-secondary" onclick="app.clearAiChat()" style="font-size: 0.8rem; padding: 6px 14px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Clear Session</span>
+              </button>
+            </div>
+
+            <!-- Quick Suggestions Row -->
+            <div class="ai-quick-prompts">
+              <button class="ai-prompt-chip" onclick="app.sendAiPrompt('Analyze my current BMI and Body Fat target')">Analyze my BMI and Body Fat</button>
+              <button class="ai-prompt-chip" onclick="app.sendAiPrompt('How many workout sessions do I need to drop 5kg safely?')">Cardio &amp; workouts for 5kg loss</button>
+              <button class="ai-prompt-chip" onclick="app.sendAiPrompt('Give me a 4-day Upper/Lower strength and hypertrophy split')">4-Day Upper/Lower Split</button>
+              <button class="ai-prompt-chip" onclick="app.sendAiPrompt('How much protein and water should I consume per day?')">Macro &amp; hydration protocol</button>
+              <button class="ai-prompt-chip" onclick="app.sendAiPrompt('How can I increase my bench press 1RM safely?')">Bench Press 1RM progression</button>
+            </div>
+
+            <!-- Conversation Messages Area -->
+            <div class="ai-chat-messages" id="aiChatFeed">
+              <!-- Populated by JS -->
+            </div>
+
+            <!-- Input Bar -->
+            <form class="ai-chat-input-bar" onsubmit="event.preventDefault(); app.handleAiSubmit();">
+              <input type="text" id="aiCoachInput" class="ai-chat-input" placeholder="Ask your Kinetix AI Coach about exercises, weight loss, macros, or biomechanics..." autocomplete="off">
+              <button type="submit" class="ai-send-btn" id="aiSendBtn">
+                <span>Send</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+            </form>
           </div>
         </section>
 
@@ -1023,7 +1267,7 @@
                 <h1>Master Command & Athlete Control</h1>
                 <span class="tag-chip tag-orange" style="font-weight: 700;">SUPERADMIN</span>
               </div>
-              <div class="page-hero-subtitle">Authorized administrator: Bilal Lodhi (bilallodhi824@gmail.com) • Global telemetry & athlete database</div>
+              <div class="page-hero-subtitle">Authorized administrator: Bilal Khan (bilallodhi824@gmail.com) • Global telemetry & athlete database</div>
             </div>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
               <button class="btn-secondary" id="adminRefreshBtn" onclick="app.refreshAdminDashboard()">
@@ -1223,25 +1467,43 @@
          ==================================================================== -->
     <div class="modal-backdrop" id="authModal">
       <div class="auth-modal-card">
-        <button class="modal-close-btn" onclick="app.closeAuthModal()">✕</button>
+        <button class="modal-close-btn" onclick="app.closeAuthModal()" aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
 
         <div class="auth-card-header">
           <div class="auth-logo-badge">K</div>
           <h2 class="auth-title">KINETIX <span>LAB</span></h2>
-          <p class="auth-subtitle">Athletic Biomechanics & High-Performance Suite</p>
+          <p class="auth-subtitle">Athletic Biomechanics &amp; Cloud Profile Engine</p>
         </div>
 
-        <!-- Tab Selector: Sign In vs Create Account -->
+        <!-- Tab Selector: Switch Profile vs Sign In vs Create Account -->
         <div class="auth-tab-bar">
-          <button class="auth-tab-btn active" id="tabBtnSignIn" onclick="app.switchAuthTab('signin')">Sign In</button>
+          <button class="auth-tab-btn active" id="tabBtnSwitch" onclick="app.switchAuthTab('switch')">Switch Profile</button>
+          <button class="auth-tab-btn" id="tabBtnSignIn" onclick="app.switchAuthTab('signin')">Sign In</button>
           <button class="auth-tab-btn" id="tabBtnRegister" onclick="app.switchAuthTab('register')">Create Account</button>
         </div>
 
         <!-- Alert Banner -->
         <div class="auth-alert" id="authAlertBox" style="display: none;"></div>
 
+        <!-- SWITCH PROFILE TAB -->
+        <div class="auth-form" id="switchForm" style="display: block;">
+          <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px; font-family: var(--font-mono); display: flex; justify-content: space-between; align-items: center;">
+            <span>REGISTERED ATHLETES:</span>
+            <span style="color: var(--accent-lime); font-size: 0.72rem; font-weight: 700;">1-CLICK SWITCH</span>
+          </div>
+          <div class="auth-user-list" id="switchUserList">
+            <!-- Populated dynamically by app.renderSwitchUserList() -->
+          </div>
+          <button type="button" class="btn-secondary" style="width: 100%; justify-content: center; margin-top: 6px;" onclick="app.switchAuthTab('register')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>+ Create New Athlete Profile</span>
+          </button>
+        </div>
+
         <!-- SIGN IN FORM -->
-        <form class="auth-form" id="signInForm" onsubmit="event.preventDefault(); app.submitSignIn();">
+        <form class="auth-form" id="signInForm" style="display: none;" onsubmit="event.preventDefault(); app.submitSignIn();">
           <div class="form-group">
             <label class="form-label">Email Address</label>
             <div class="input-icon-wrap">
@@ -1280,7 +1542,7 @@
             <label class="form-label">Full Name</label>
             <div class="input-icon-wrap">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-              <input type="text" id="regName" class="form-input" placeholder="e.g. Bilal Lodhi" required autocomplete="name">
+              <input type="text" id="regName" class="form-input" placeholder="e.g. Bilal Khan" required autocomplete="name">
             </div>
           </div>
 
@@ -1316,7 +1578,7 @@
         <div class="auth-demo-buttons">
           <button type="button" class="demo-login-chip chip-admin" onclick="app.quickFillAdmin()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <span>Login as Bilal (Admin)</span>
+            <span>Login as Bilal Khan (Admin)</span>
           </button>
           <button type="button" class="demo-login-chip chip-client" onclick="app.quickFillClient()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>

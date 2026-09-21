@@ -25,7 +25,7 @@ const KinetixAuth = (function() {
       const initialUsers = [
         {
           id: 'usr_admin_01',
-          name: 'Bilal Lodhi',
+          name: 'Bilal Khan',
           email: MASTER_ADMIN_EMAIL,
           password: MASTER_ADMIN_DEFAULT_PASS,
           role: 'admin',
@@ -66,10 +66,26 @@ const KinetixAuth = (function() {
       localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(initialUsers));
     }
 
+    // Automatic migration if cached session has previous name
+    let users = getAllUsers();
+    let migrated = false;
+    users = users.map(u => {
+      if (u.email === MASTER_ADMIN_EMAIL && u.name !== 'Bilal Khan') {
+        u.name = 'Bilal Khan';
+        migrated = true;
+      }
+      return u;
+    });
+    if (migrated) saveUsers(users);
+
     // Default current user if not set
-    if (!localStorage.getItem(CURRENT_USER_KEY)) {
-      const users = JSON.parse(localStorage.getItem(USERS_STORAGE_KEY));
-      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(users[1] || users[0]));
+    let current = getCurrentUser();
+    if (!current) {
+      current = users.find(u => u.email === MASTER_ADMIN_EMAIL) || users[0];
+      setCurrentUser(current);
+    } else if (current.email === MASTER_ADMIN_EMAIL && current.name !== 'Bilal Khan') {
+      current.name = 'Bilal Khan';
+      setCurrentUser(current);
     }
 
     // Sync with Firebase Firestore asynchronously
@@ -280,7 +296,24 @@ const KinetixAuth = (function() {
   // Logout
   function logout() {
     setCurrentUser(null);
-    return { success: true };
+    return { success: true, message: 'Logged out successfully.' };
+  }
+
+  // Switch Active Athlete Account
+  function switchUser(userId) {
+    const users = getAllUsers();
+    const user = users.find(u => u.id === userId || u.email.toLowerCase() === String(userId).toLowerCase());
+    if (!user) {
+      return { success: false, message: 'Athlete profile not found in database.' };
+    }
+    user.lastActive = 'Just now';
+    saveUsers(users);
+    setCurrentUser(user);
+    return {
+      success: true,
+      user: user,
+      message: `Switched session to ${user.name} (${user.role === 'admin' ? 'Master Admin' : 'Athlete'}).`
+    };
   }
 
   // Admin Delete User (Firestore + Local)
@@ -387,6 +420,7 @@ const KinetixAuth = (function() {
     register,
     login,
     logout,
+    switchUser,
     deleteUser,
     toggleUserStatus,
     syncWithCloud,
