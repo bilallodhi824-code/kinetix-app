@@ -125,10 +125,15 @@ async function handler(req, res) {
 
   // Parse action from query or url
   let url = req.url;
+  // Extract action from path (e.g. /api/auth/broadcasts) or query param
   let action = '';
-  if (req.query && req.query.action) {
+  const pathParts = url.split('?')[0].split('/').filter(Boolean);
+  if (pathParts.length >= 3) {
+    action = pathParts[pathParts.length - 1];
+  }
+  if (!action && req.query && req.query.action) {
     action = req.query.action;
-  } else {
+  } else if (!action) {
     const qIndex = url.indexOf('?');
     if (qIndex !== -1) {
       const sp = new URLSearchParams(url.substring(qIndex));
@@ -167,7 +172,7 @@ async function handler(req, res) {
     const athletesCol = db.collection('athletes');
 
     // 1. GET ALL USERS / INITIALIZE
-    if (req.method === 'GET' || action === 'users' || action === 'init') {
+    if ((!action || action === 'users' || action === 'init' || action === 'auth') && req.method === 'GET') {
       const snapshot = await athletesCol.get();
       const users = [];
       snapshot.forEach(doc => {
@@ -330,6 +335,86 @@ async function handler(req, res) {
         workout: entry,
         message: 'Workout session persisted to Firebase cloud.'
       });
+    }
+
+    // 7. UPGRADE SUBSCRIPTION / BILLING PLAN
+    if (action === 'upgradeTier') {
+      const { userId, tier, plan, billingCycle } = body;
+      if (!userId) return sendJson(400, { success: false, message: 'userId is required' });
+
+      const userRef = athletesCol.doc(userId);
+      const userDoc = await userRef.get();
+      if (!userDoc.exists) return sendJson(404, { success: false, message: 'Athlete not found.' });
+
+      const renewDate = new Date();
+      renewDate.setMonth(renewDate.getMonth() + (billingCycle === 'annual' ? 12 : 1));
+
+      const updateData = {
+        tier: tier || 'ELITE ATHLETE',
+        subscriptionPlan: plan || 'Elite Performer',
+        subscriptionStatus: 'active',
+        billingCycle: billingCycle || 'monthly',
+        subscriptionRenewsAt: renewDate.toISOString()
+      };
+
+      await userRef.update(updateData);
+      const updatedUser = (await userRef.get()).data();
+
+      return sendJson(200, {
+        success: true,
+        source: 'firebase-firestore',
+        user: updatedUser,
+        message: `Subscription successfully upgraded to ${plan || tier}!`
+      });
+    }
+
+    // 8. FORGOT / RESET PASSWORD
+    if (action === 'resetPassword') {
+      const { email, newPassword } = body;
+      const cleanEmail = (email || '').trim().toLowerCase();
+      if (!cleanEmail || !newPassword) {
+        return sendJson(400, { success: false, message: 'Email and new password are required.' });
+      }
+
+      const querySnapshot = await athletesCol.where('email', '==', cleanEmail).limit(1).get();
+      if (querySnapshot.empty) {
+        return sendJson(404, { success: false, message: 'No registered athlete found with this email.' });
+      }
+
+      const userDoc = querySnapshot.docs[0];
+      await userDoc.ref.update({ password: newPassword });
+
+      return sendJson(200, {
+        success: true,
+        source: 'firebase-firestore',
+        message: 'Password successfully updated in Firebase. You can now log in.'
+      });
+    }
+
+    // 9. COACH BROADCASTS (GET / POST)
+    if (action === 'broadcasts') {
+      const broadcastsCol = db.collection('broadcasts');
+
+      if (req.method === 'POST') {
+        const { title, message, author } = body;
+        if (!title) return sendJson(400, { success: false, message: 'Title is required' });
+
+        const docRef = broadcastsCol.doc();
+        const entry = {
+          id: docRef.id,
+          title,
+          message: message || '',
+          author: author || 'Bilal Khan (Head of Performance)',
+          createdAt: new Date().toISOString()
+        };
+        await docRef.set(entry);
+        return sendJson(200, { success: true, broadcast: entry, message: 'Broadcast published to all athletes.' });
+      } else {
+        const snapshot = await broadcastsCol.orderBy('createdAt', 'desc').limit(10).get();
+        const items = [];
+        snapshot.forEach(doc => items.push(doc.data()));
+        return sendJson(200, { success: true, broadcasts: items });
+      }
     }
 
     return sendJson(400, { success: false, message: `Unknown action: ${action}` });

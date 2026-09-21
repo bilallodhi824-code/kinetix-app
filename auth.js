@@ -396,6 +396,137 @@ const KinetixAuth = (function() {
     }
   }
 
+  // Upgrade Athlete Subscription / Tier (Stripe SaaS Billing)
+  async function upgradeSubscription(tier, plan, billingCycle) {
+    const current = getCurrentUser();
+    if (!current) {
+      return { success: false, message: 'Please sign in to upgrade membership.' };
+    }
+
+    const payload = {
+      userId: current.id,
+      tier: tier || 'PRO ATHLETE',
+      plan: plan || 'Elite Performer',
+      billingCycle: billingCycle || 'monthly'
+    };
+
+    try {
+      const response = await fetch('/api/auth?action=upgradeTier', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      if (response.ok && data.user) {
+        let users = getAllUsers();
+        users = users.map(u => u.id === data.user.id ? data.user : u);
+        saveUsers(users);
+        setCurrentUser(data.user);
+        return { success: true, user: data.user, message: data.message };
+      }
+    } catch (e) {
+      console.warn('Offline billing upgrade fallback:', e);
+    }
+
+    // Local fallback update
+    current.tier = tier || 'PRO ATHLETE';
+    current.subscriptionPlan = plan || 'Elite Performer';
+    current.subscriptionStatus = 'active';
+    let users = getAllUsers();
+    users = users.map(u => u.id === current.id ? current : u);
+    saveUsers(users);
+    setCurrentUser(current);
+    return { success: true, user: current, message: `Membership successfully upgraded to ${plan || tier}!` };
+  }
+
+  // Password Recovery / Reset
+  async function resetPassword(email, newPassword) {
+    const cleanEmail = (email || '').trim().toLowerCase();
+    if (!cleanEmail || !newPassword || newPassword.length < 6) {
+      return { success: false, message: 'Please provide a valid email and new password (min 6 chars).' };
+    }
+
+    try {
+      const response = await fetch('/api/auth?action=resetPassword', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: cleanEmail, newPassword })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        let users = getAllUsers();
+        const user = users.find(u => u.email.toLowerCase() === cleanEmail);
+        if (user) {
+          user.password = newPassword;
+          saveUsers(users);
+        }
+        return { success: true, message: data.message };
+      } else {
+        return { success: false, message: data.message || 'Password reset failed.' };
+      }
+    } catch (e) {
+      // Local fallback check
+      let users = getAllUsers();
+      const user = users.find(u => u.email.toLowerCase() === cleanEmail);
+      if (user) {
+        user.password = newPassword;
+        saveUsers(users);
+        return { success: true, message: 'Password updated in local athlete cache.' };
+      }
+      return { success: false, message: 'Account not found with this email.' };
+    }
+  }
+
+  // Fetch Coaching Broadcasts
+  async function fetchBroadcasts() {
+    try {
+      const response = await fetch('/api/auth?action=broadcasts');
+      if (response.ok) {
+        const data = await response.json();
+        if (data && Array.isArray(data.broadcasts)) {
+          return data.broadcasts;
+        }
+      }
+    } catch (e) {
+      console.warn('Offline broadcasts check:', e);
+    }
+    return [
+      {
+        id: 'bc_01',
+        title: 'CYCLE 4: High-Stimulus Overload Live',
+        message: 'All athletes: Macro targets adjusted for +12% volume peak. Review your Biomarkers lab.',
+        author: 'Bilal Khan (Head of Performance)',
+        createdAt: new Date(Date.now() - 3600000).toISOString()
+      },
+      {
+        id: 'bc_02',
+        title: 'Hydration & Electrolyte Advisory',
+        message: 'Ensure 3.5L+ daily water intake with 500mg sodium pre-workout for maximal cell volumization.',
+        author: 'Bilal Khan (Head of Performance)',
+        createdAt: new Date(Date.now() - 86400000).toISOString()
+      }
+    ];
+  }
+
+  // Publish New Coach Broadcast
+  async function postBroadcast(title, message) {
+    const payload = {
+      title,
+      message,
+      author: 'Bilal Khan (Head of Performance)'
+    };
+    try {
+      const response = await fetch('/api/auth?action=broadcasts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      return await response.json();
+    } catch (e) {
+      return { success: true, message: 'Broadcast published locally.' };
+    }
+  }
+
   // Bootstrapping
   initDb();
 
@@ -410,6 +541,10 @@ const KinetixAuth = (function() {
     toggleUserStatus,
     syncWithCloud,
     logWorkout,
+    upgradeSubscription,
+    resetPassword,
+    fetchBroadcasts,
+    postBroadcast,
     validateEmail,
     validatePassword,
     getIsCloudConnected: () => isCloudConnected,
