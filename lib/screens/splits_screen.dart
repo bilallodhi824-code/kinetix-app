@@ -105,10 +105,29 @@ class _SplitsScreenState extends State<SplitsScreen> {
           const SizedBox(height: 18),
 
           // Splits List
-          ..._splits.map((split) {
+          ..._splits.where((split) {
+            if (_selectedFilter == 'ALL') return true;
+            if (_selectedFilter == 'STRENGTH') {
+              return split.badgeText.contains('STRENGTH') || split.focus.contains('Strength');
+            }
+            if (_selectedFilter == 'HYPERTROPHY') {
+              return split.badgeText.contains('HYPERTROPHY') || split.focus.contains('Hypertrophy');
+            }
+            if (_selectedFilter == 'CONDITIONING') {
+              return split.badgeText.contains('CONDITIONING') || split.focus.contains('Conditioning');
+            }
+            return true;
+          }).map((split) {
             return SplitCard(
               split: split,
-              onTap: () {},
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Selected Split: ${split.title}'),
+                    backgroundColor: AppTheme.accentLime,
+                  ),
+                );
+              },
             );
           }),
         ],

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/workout_provider.dart';
 import '../theme/app_theme.dart';
 import '../widgets/custom_components.dart';
 
@@ -9,6 +11,8 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<WorkoutProvider>();
+    
     return SafeArea(
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -87,23 +91,23 @@ class DashboardScreen extends StatelessWidget {
           const SizedBox(height: 24),
 
           // Primary Telemetry Metrics
-          const Row(
+          Row(
             children: [
               Expanded(
                 child: MetricCard(
                   label: 'Weekly Volume',
-                  value: '47,120',
+                  value: '${provider.weeklyVolume}',
                   unit: 'kg',
                   trend: '↑ +14.2% vs last cycle',
                   accentColor: AppTheme.accentLime,
                   icon: Icons.bolt,
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: MetricCard(
                   label: 'CNS Readiness',
-                  value: '88%',
+                  value: '${provider.cnsReadiness}%',
                   unit: 'Prime',
                   trend: 'HRV 72ms optimal',
                   accentColor: AppTheme.accentCyan,
@@ -113,23 +117,23 @@ class DashboardScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          const Row(
+          Row(
             children: [
               Expanded(
                 child: MetricCard(
                   label: 'Active Streak',
-                  value: '18',
+                  value: '${provider.activeStreak}',
                   unit: 'days',
                   trend: 'Cycle 4 Microcycle 2',
                   accentColor: AppTheme.accentOrange,
                   icon: Icons.local_fire_department,
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Expanded(
                 child: MetricCard(
                   label: 'Workouts Done',
-                  value: '5 / 6',
+                  value: '${provider.workoutsDone}',
                   unit: 'sessions',
                   trend: '1 session remaining',
                   accentColor: AppTheme.accentPurple,

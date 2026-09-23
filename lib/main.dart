@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'providers/workout_provider.dart';
 import 'theme/app_theme.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/splits_screen.dart';
@@ -7,7 +9,12 @@ import 'screens/vault_calc_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const KinetixFitnessApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => WorkoutProvider(),
+      child: const KinetixFitnessApp(),
+    ),
+  );
 }
 
 class KinetixFitnessApp extends StatelessWidget {

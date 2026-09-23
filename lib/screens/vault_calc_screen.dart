@@ -61,6 +61,13 @@ class _VaultCalcScreenState extends State<VaultCalcScreen> {
   }
 
   @override
+  void dispose() {
+    _weightController.dispose();
+    _repsController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: ListView(

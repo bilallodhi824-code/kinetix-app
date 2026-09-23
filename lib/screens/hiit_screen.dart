@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/workout_provider.dart';
 import '../theme/app_theme.dart';
 import '../widgets/custom_components.dart';
 
@@ -51,6 +53,20 @@ class _HiitScreenState extends State<HiitScreen> {
               });
             } else {
               _resetTimer();
+              
+              // Log the workout in global state
+              if (mounted) {
+                context.read<WorkoutProvider>().logWorkout(
+                  2500, // example volume in kg
+                  4,    // cns drop percentage
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('🔥 HIIT Session Completed & Logged!'),
+                    backgroundColor: AppTheme.accentLime,
+                  ),
+                );
+              }
             }
           }
         }
