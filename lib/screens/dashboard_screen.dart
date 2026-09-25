@@ -155,6 +155,14 @@ class DashboardScreen extends StatelessWidget {
               ),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: AppTheme.borderSubtle),
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.accentLime.withAlpha(15),
+                  blurRadius: 20,
+                  spreadRadius: 1,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
